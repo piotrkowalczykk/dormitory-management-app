@@ -2,8 +2,9 @@ services:
   db:
     image: 'postgres:latest'
     container_name: 'postgres-container'
+    restart: always
     environment:
-      POSTGRES_DB: dormitorydb
+      POSTGRES_DB: dormitory
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password123
     ports:
@@ -11,9 +12,12 @@ services:
   pgadmin:
     image: 'elestio/pgadmin'
     container_name: 'pgadmin-container'
+    restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@localhost.com
       PGADMIN_DEFAULT_PASSWORD: password123
       PGADMIN_LISTEN_PORT: 5050
     ports:
       - '5050:5050'
+    depends_on:
+      - db
