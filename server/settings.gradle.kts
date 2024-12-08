@@ -1,1 +1,1 @@
-rootProject.name = "jwt-user-auth"
+rootProject.name = "dormitory-management-app"
