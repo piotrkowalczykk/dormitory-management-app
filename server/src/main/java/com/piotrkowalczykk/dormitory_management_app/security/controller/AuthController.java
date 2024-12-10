@@ -23,5 +23,4 @@ public class AuthController {
     public RegisterResponse register(@RequestBody RegisterRequest registerRequest){
         return authService.registerUser(registerRequest);
     }
-
 }
