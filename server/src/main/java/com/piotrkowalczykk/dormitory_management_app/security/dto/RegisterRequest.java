@@ -1,16 +1,38 @@
 package com.piotrkowalczykk.dormitory_management_app.security.dto;
 
-public class RegisterRequest {
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.piotrkowalczykk.dormitory_management_app.security.model.Gender;
+import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-    public RegisterRequest(String email, String password, String firstName, String lastName) {
+import java.time.LocalDate;
+
+public class RegisterRequest {
+
+    @Email(message = "email address is not valid")
+    @NotBlank(message = "email address is mandatory")
+    private String email;
+    @Size(min = 8, message = "password must be at least 8 characters")
+    @NotBlank(message = "password is mandatory")
+    private String password;
+    @NotBlank(message = "first name is mandatory")
+    private String firstName;
+    @NotBlank(message = "last name is mandatory")
+    private String lastName;
+    @NotNull(message = "gender is mandatory")
+    private Gender gender;
+    @Past(message = "date of birth is not valid")
+    @NotNull(message = "date of birth is mandatory")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfBirth;
+
+    public RegisterRequest(String email, String password, String firstName, String lastName, Gender gender, LocalDate dateOfBirth) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.gender = gender;;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getEmail() {
@@ -43,5 +65,21 @@ public class RegisterRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }
