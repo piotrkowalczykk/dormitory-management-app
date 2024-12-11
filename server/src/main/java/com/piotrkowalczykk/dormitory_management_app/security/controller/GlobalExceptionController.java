@@ -1,6 +1,7 @@
 package com.piotrkowalczykk.dormitory_management_app.security.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,9 +25,22 @@ public class GlobalExceptionController{
         } else if (exception instanceof HttpMessageNotReadableException) {
             errorMessage += "dateOfBirth: invalid date format";
         } else {
-            errorMessage = "Unexpected error occurred.";
+            errorMessage = "unexpected error occurred.";
         }
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ResponseGlobalException> handleDataIntegrityViolationException(DataIntegrityViolationException exception){
+        String errorMessage = exception.getMessage();
+        if(errorMessage.contains("duplicate")){
+            errorMessage = "email: email address is already in use";
+        } else {
+            errorMessage = "data integrity violation";
+        }
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }
