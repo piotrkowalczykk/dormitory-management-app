@@ -3,6 +3,7 @@ package com.piotrkowalczykk.dormitory_management_app.security.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -19,8 +20,13 @@ public class AuthUser {
     private Gender gender;
     private LocalDate dateOfBirth;
     private LocalDate createdAt;
+    private boolean emailVerified = false;
+    private String emailVerificationCode = null;
+    private LocalDateTime emailVerificationCodeExpiryDate;
 
-    public AuthUser(long id, String email, String password, String firstName, String lastName, Gender gender, LocalDate dateOfBirth, LocalDate createdAt) {
+    public AuthUser(long id, String email, String password, String firstName, String lastName,
+                    Gender gender, LocalDate dateOfBirth, LocalDate createdAt, boolean emailVerified,
+                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -29,6 +35,9 @@ public class AuthUser {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.createdAt = createdAt;
+        this.emailVerified = emailVerified;
+        this.emailVerificationCode = emailVerificationCode;
+        this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
     }
 
     public AuthUser(){
@@ -97,5 +106,29 @@ public class AuthUser {
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getEmailVerificationCode() {
+        return emailVerificationCode;
+    }
+
+    public void setEmailVerificationCode(String emailVerificationCode) {
+        this.emailVerificationCode = emailVerificationCode;
+    }
+
+    public LocalDateTime getEmailVerificationCodeExpiryDate() {
+        return emailVerificationCodeExpiryDate;
+    }
+
+    public void setEmailVerificationCodeExpiryDate(LocalDateTime emailVerificationCodeExpiryDate) {
+        this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
     }
 }
