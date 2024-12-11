@@ -43,6 +43,13 @@ services:
       - ./src/main:/app/src/main
     restart: always
 
+  smtp:
+    image: mailhog/mailhog
+    container_name: 'mailhog-container'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
 volumes:
   postgres_data:
 
