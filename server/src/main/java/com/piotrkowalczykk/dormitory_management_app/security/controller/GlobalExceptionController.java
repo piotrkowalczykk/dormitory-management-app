@@ -1,6 +1,7 @@
 package com.piotrkowalczykk.dormitory_management_app.security.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalException;
+import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,4 +44,10 @@ public class GlobalExceptionController{
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<ResponseGlobalException> handleEmailSendingException(EmailSendingException exception){
+        String errorMessage = exception.getMessage();
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDate.now());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

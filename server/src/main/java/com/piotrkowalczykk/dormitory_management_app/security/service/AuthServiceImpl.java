@@ -2,9 +2,12 @@ package com.piotrkowalczykk.dormitory_management_app.security.service;
 
 import com.piotrkowalczykk.dormitory_management_app.security.dto.RegisterRequest;
 import com.piotrkowalczykk.dormitory_management_app.security.dto.RegisterResponse;
+import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthRepository;
+import com.piotrkowalczykk.dormitory_management_app.security.utils.EmailService;
 import com.piotrkowalczykk.dormitory_management_app.security.utils.Encoder;
+import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -15,12 +18,14 @@ import java.time.LocalDateTime;
 public class AuthServiceImpl implements AuthService{
 
     private final Encoder encoder;
+    private final EmailService emailService;
     private final AuthRepository authRepository;
     private final int durationInMinutes = 1;
 
-    public AuthServiceImpl(Encoder encoder, AuthRepository authRepository) {
+    public AuthServiceImpl(Encoder encoder, EmailService emailService, AuthRepository authRepository) {
         this.encoder = encoder;
         this.authRepository = authRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -32,6 +37,8 @@ public class AuthServiceImpl implements AuthService{
         }
         return emailCode.toString();
     }
+
+
 
     @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest){
@@ -50,6 +57,14 @@ public class AuthServiceImpl implements AuthService{
         authUser.setEmailVerificationCode(hashedEmailCode);
         authUser.setEmailVerificationCodeExpiryDate(LocalDateTime.now().plusMinutes(durationInMinutes));
         authRepository.save(authUser);
+
+        String subject = "Email verification";
+        String content = String.format("Enter this code to verify your email: %s. The code will expire in %s minutes.", emailCode, durationInMinutes);
+        try {
+            emailService.sendEmail(authUser.getEmail(), subject, content);
+        } catch (MessagingException e) {
+            throw new EmailSendingException("error sending verification email");
+        }
         return new RegisterResponse("User registered successfully", "token");
     }
 }
