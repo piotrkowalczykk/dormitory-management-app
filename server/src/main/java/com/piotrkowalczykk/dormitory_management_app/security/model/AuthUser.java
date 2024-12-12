@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,10 +25,14 @@ public class AuthUser {
     private boolean emailVerified = false;
     private String emailVerificationCode = null;
     private LocalDateTime emailVerificationCodeExpiryDate;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
+    private List<Role> roles = new ArrayList<>();
 
     public AuthUser(long id, String email, String password, String firstName, String lastName,
                     Gender gender, LocalDate dateOfBirth, LocalDate createdAt, boolean emailVerified,
-                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate) {
+                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, List<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -38,6 +44,7 @@ public class AuthUser {
         this.emailVerified = emailVerified;
         this.emailVerificationCode = emailVerificationCode;
         this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
+        this.roles = roles;
     }
 
     public AuthUser(){
@@ -130,5 +137,13 @@ public class AuthUser {
 
     public void setEmailVerificationCodeExpiryDate(LocalDateTime emailVerificationCodeExpiryDate) {
         this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

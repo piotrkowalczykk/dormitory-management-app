@@ -38,8 +38,6 @@ public class AuthServiceImpl implements AuthService{
         return emailCode.toString();
     }
 
-
-
     @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest){
 
