@@ -4,7 +4,9 @@ import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AuthRepository extends JpaRepository<AuthUser, Long> {
+import java.util.Optional;
 
+@Repository
+public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
+    Optional<AuthUser> findByEmail(String email);
 }
