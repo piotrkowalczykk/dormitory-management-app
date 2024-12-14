@@ -71,6 +71,6 @@ public class AuthServiceImpl implements AuthService{
             throw new EmailSendingException("Error sending verification email");
         }
 
-        return new RegisterResponse("User registered successfully", "token");
+        return new RegisterResponse("User registered successfully");
     }
 }
