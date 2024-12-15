@@ -4,6 +4,7 @@ import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalE
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,5 +50,12 @@ public class GlobalExceptionController{
         String errorMessage = exception.getMessage();
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseGlobalException> handleIllegalArgumentException(IllegalArgumentException exception){
+        String errorMessage = exception.getMessage();
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

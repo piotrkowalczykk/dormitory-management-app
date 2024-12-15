@@ -58,9 +58,9 @@ public class JsonWebToken {
         } catch (Exception e){
             throw new AuthenticationCredentialsNotFoundException("token expired or incorrect");
         }
-
     }
 
-
-
+    public boolean isTokenExpired(String token){
+        return extractClaim(token, Claims::getExpiration).before(new Date());
+    }
 }

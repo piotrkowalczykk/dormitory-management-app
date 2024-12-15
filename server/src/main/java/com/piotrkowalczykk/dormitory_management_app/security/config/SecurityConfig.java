@@ -30,7 +30,7 @@ public class SecurityConfig {
         httpSecurity.csrf(customizer -> customizer.disable());
         httpSecurity.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS).disable());
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers("/auth/register").permitAll().anyRequest().authenticated());
+        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers("/auth/register", "/auth/validate-email", "/auth/login").permitAll().anyRequest().authenticated());
         httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
