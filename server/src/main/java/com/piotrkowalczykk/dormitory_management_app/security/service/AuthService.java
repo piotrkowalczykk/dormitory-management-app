@@ -6,4 +6,5 @@ public interface AuthService {
     public String generateEmailVerificationCode();
     public ValidateEmailResponse validateEmailVerificationCode(ValidateEmailRequest validateEmailRequest);
     public RegisterResponse registerUser(RegisterRequest registerRequest);
+    public LoginResponse loginUser(LoginRequest loginRequest);
 }

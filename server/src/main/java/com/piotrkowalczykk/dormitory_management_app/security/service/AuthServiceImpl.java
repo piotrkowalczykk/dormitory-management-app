@@ -7,13 +7,13 @@ import com.piotrkowalczykk.dormitory_management_app.security.model.Role;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.RoleRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.utils.EmailService;
-import com.piotrkowalczykk.dormitory_management_app.security.utils.Encoder;
 import com.piotrkowalczykk.dormitory_management_app.security.utils.JsonWebToken;
 import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 public class AuthServiceImpl implements AuthService{
 
-    private final Encoder encoder;
+    private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final AuthUserRepository authUserRepository;
     private final RoleRepository roleRepository;
@@ -33,8 +33,8 @@ public class AuthServiceImpl implements AuthService{
     private final JsonWebToken jsonWebToken;
     private static final int DURATION_IN_MINUTES = 1;
 
-    public AuthServiceImpl(Encoder encoder, EmailService emailService, AuthUserRepository authUserRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
-        this.encoder = encoder;
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, EmailService emailService, AuthUserRepository authUserRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
+        this.passwordEncoder = passwordEncoder;
         this.authUserRepository = authUserRepository;
         this.emailService = emailService;
         this.roleRepository = roleRepository;
@@ -56,11 +56,11 @@ public class AuthServiceImpl implements AuthService{
     public RegisterResponse registerUser(RegisterRequest registerRequest){
 
         String emailCode = generateEmailVerificationCode();
-        String hashedEmailCode = encoder.encode(emailCode);
+        String hashedEmailCode = passwordEncoder.encode(emailCode);
 
         AuthUser authUser = new AuthUser();
         authUser.setEmail(registerRequest.getEmail());
-        authUser.setPassword(encoder.encode(registerRequest.getPassword()));
+        authUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         authUser.setFirstName(registerRequest.getFirstName());
         authUser.setLastName(registerRequest.getLastName());
         authUser.setGender(registerRequest.getGender());
@@ -85,16 +85,24 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public ValidateEmailResponse validateEmailVerificationCode(ValidateEmailRequest validateEmailRequest){
         Optional<AuthUser> user = authUserRepository.findByEmail(validateEmailRequest.getEmail());
-        if(user.isPresent() && encoder.matches(validateEmailRequest.getEmailCode(), user.get().getEmailVerificationCode()) && !user.get().getEmailVerificationCodeExpiryDate().isBefore(LocalDateTime.now())){
+        if(user.isPresent() && passwordEncoder.matches(validateEmailRequest.getEmailCode(), user.get().getEmailVerificationCode()) && !user.get().getEmailVerificationCodeExpiryDate().isBefore(LocalDateTime.now())){
             user.get().setEmailVerificationCode(null);
             user.get().setEmailVerificationCodeExpiryDate(null);
             user.get().setEmailVerified(true);
             authUserRepository.save(user.get());
             return new ValidateEmailResponse("Email verified successfully");
-        } else if (user.isPresent() && encoder.matches(validateEmailRequest.getEmailCode(), user.get().getEmailVerificationCode()) && user.get().getEmailVerificationCodeExpiryDate().isBefore(LocalDateTime.now())){
+        } else if (user.isPresent() && passwordEncoder.matches(validateEmailRequest.getEmailCode(), user.get().getEmailVerificationCode()) && user.get().getEmailVerificationCodeExpiryDate().isBefore(LocalDateTime.now())){
             throw new IllegalArgumentException("Email verification token expired.");
         } else {
             throw new IllegalArgumentException("Email verification token failed.");
         }
+    }
+
+    @Override
+    public LoginResponse loginUser(LoginRequest loginRequest){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jsonWebToken.generateToken(authentication);
+        return new LoginResponse(token, "Bearer");
     }
 }

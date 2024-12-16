@@ -24,4 +24,9 @@ public class AuthController {
     public ValidateEmailResponse validateEmail(@RequestBody ValidateEmailRequest validateEmailRequest){
         return authService.validateEmailVerificationCode(validateEmailRequest);
     }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
+        return authService.loginUser(loginRequest);
+    }
 }
