@@ -29,4 +29,10 @@ public class AuthController {
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
         return authService.loginUser(loginRequest);
     }
+
+    @PostMapping("/resend-email-verification-code")
+    public String resendEmailVerificationCode(@RequestBody SendEmailRequest sendEmailRequest){
+        authService.sendEmailVerificationCode(sendEmailRequest);
+        return "Email verification code sent successfully";
+    }
 }

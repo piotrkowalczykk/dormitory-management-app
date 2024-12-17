@@ -9,6 +9,8 @@ import com.piotrkowalczykk.dormitory_management_app.security.repository.RoleRepo
 import com.piotrkowalczykk.dormitory_management_app.security.utils.EmailService;
 import com.piotrkowalczykk.dormitory_management_app.security.utils.JsonWebToken;
 import jakarta.mail.MessagingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @Service
 public class AuthServiceImpl implements AuthService{
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final AuthUserRepository authUserRepository;
@@ -32,6 +35,7 @@ public class AuthServiceImpl implements AuthService{
     private final AuthenticationManager authenticationManager;
     private final JsonWebToken jsonWebToken;
     private static final int DURATION_IN_MINUTES = 1;
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(PasswordEncoder passwordEncoder, EmailService emailService, AuthUserRepository authUserRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
         this.passwordEncoder = passwordEncoder;
@@ -72,13 +76,15 @@ public class AuthServiceImpl implements AuthService{
         authUser.setRoles(Collections.singletonList(roles));
         authUserRepository.save(authUser);
 
-        String subject = "Email verification";
+        String subject = "Email Verification";
         String content = String.format("Enter this code to verify your email: %s. The code will expire in %s minutes.", emailCode, DURATION_IN_MINUTES);
+
         try {
             emailService.sendEmail(authUser.getEmail(), subject, content);
         } catch (MessagingException e) {
             throw new EmailSendingException("Error sending verification email");
         }
+
         return new RegisterResponse("User registered successfully");
     }
 
@@ -104,5 +110,29 @@ public class AuthServiceImpl implements AuthService{
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jsonWebToken.generateToken(authentication);
         return new LoginResponse(token, "Bearer");
+    }
+
+    @Override
+    public void sendEmailVerificationCode(SendEmailRequest sendEmailRequest){
+        Optional<AuthUser> user = authUserRepository.findByEmail(sendEmailRequest.getEmail());
+        if(user.isPresent() && !user.get().isEmailVerified()){
+            String emailCode = generateEmailVerificationCode();
+            String hashedEmailCode = passwordEncoder.encode(emailCode);
+            user.get().setEmailVerificationCode(hashedEmailCode);
+            user.get().setEmailVerificationCodeExpiryDate(LocalDateTime.now().plusMinutes(DURATION_IN_MINUTES));
+            authUserRepository.save(user.get());
+
+            String subject = "Email verification";
+            String content = String.format("Enter this code to verify your email: %s. The code will expire in %s minutes.", emailCode, DURATION_IN_MINUTES);
+
+            try {
+                emailService.sendEmail(sendEmailRequest.getEmail(), subject, content);
+            } catch (MessagingException e) {
+                throw new EmailSendingException("Error sending verification email");
+            }
+
+        } else {
+            throw new IllegalArgumentException("Email verification token failed, or email is already verified");
+        }
     }
 }
