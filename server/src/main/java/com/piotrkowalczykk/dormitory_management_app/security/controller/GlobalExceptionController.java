@@ -1,10 +1,10 @@
 package com.piotrkowalczykk.dormitory_management_app.security.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalException;
+import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,5 +57,12 @@ public class GlobalExceptionController{
         String errorMessage = exception.getMessage();
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<ResponseGlobalException> handleCustomAuthenticationException(CustomAuthenticationException exception){
+        String errorMessage = exception.getMessage();
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDate.now());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 }

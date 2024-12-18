@@ -1,6 +1,7 @@
 package com.piotrkowalczykk.dormitory_management_app.security.service;
 
 import com.piotrkowalczykk.dormitory_management_app.security.dto.*;
+import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.model.Role;
@@ -58,6 +59,15 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public LoginResponse loginUser(LoginRequest loginRequest){
+
+        Optional<AuthUser> user = authUserRepository.findByEmail(loginRequest.getEmail());
+
+        if(user.isEmpty()){
+            throw new CustomAuthenticationException("Email does not exist");
+        } else if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())){
+            throw new CustomAuthenticationException("Invalid password");
+        }
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jsonWebToken.generateToken(authentication);
