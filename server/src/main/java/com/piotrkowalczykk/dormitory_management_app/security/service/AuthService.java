@@ -9,4 +9,5 @@ public interface AuthService {
     public LoginResponse loginUser(LoginRequest loginRequest);
     public void sendEmailVerificationCode(SendEmailCodeRequest sendEmailCodeRequest);
     public void sendResetPasswordCode(SendEmailCodeRequest sendEmailCodeRequest);
+    public ValidatePasswordResetResponse resetPassword(ValidatePasswordResetRequest validatePasswordResetRequest);
 }

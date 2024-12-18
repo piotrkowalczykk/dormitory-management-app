@@ -57,6 +57,14 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
+    public LoginResponse loginUser(LoginRequest loginRequest){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jsonWebToken.generateToken(authentication);
+        return new LoginResponse(token, "Bearer");
+    }
+
+    @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest){
 
         String emailCode = generateEmailVerificationCode();
@@ -98,18 +106,10 @@ public class AuthServiceImpl implements AuthService{
             authUserRepository.save(user.get());
             return new ValidateEmailResponse("Email verified successfully");
         } else if (user.isPresent() && passwordEncoder.matches(validateEmailRequest.getEmailCode(), user.get().getEmailVerificationCode()) && user.get().getEmailVerificationCodeExpiryDate().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("Email verification token expired.");
+            throw new IllegalArgumentException("Email verification code expired");
         } else {
-            throw new IllegalArgumentException("Email verification token failed.");
+            throw new IllegalArgumentException("Email verification failed");
         }
-    }
-
-    @Override
-    public LoginResponse loginUser(LoginRequest loginRequest){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jsonWebToken.generateToken(authentication);
-        return new LoginResponse(token, "Bearer");
     }
 
     @Override
@@ -157,6 +157,22 @@ public class AuthServiceImpl implements AuthService{
             }
         } else {
             throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    @Override
+    public ValidatePasswordResetResponse resetPassword(ValidatePasswordResetRequest validatePasswordResetRequest){
+        Optional<AuthUser> user = authUserRepository.findByEmail(validatePasswordResetRequest.getEmail());
+        if(user.isPresent() && passwordEncoder.matches(validatePasswordResetRequest.getEmailCode(), user.get().getPasswordResetCode()) && !user.get().getPasswordResetCodeExpiryDate().isBefore(LocalDateTime.now())){
+            user.get().setPassword(passwordEncoder.encode(validatePasswordResetRequest.getNewPassword()));
+            user.get().setPasswordResetCode(null);
+            user.get().setPasswordResetCodeExpiryDate(null);
+            authUserRepository.save(user.get());
+            return new ValidatePasswordResetResponse("Password reset successfully");
+        } else if (user.isPresent() && passwordEncoder.matches(validatePasswordResetRequest.getEmailCode(), user.get().getPasswordResetCode()) && user.get().getPasswordResetCodeExpiryDate().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Password reset code expired");
+        } else {
+            throw new IllegalArgumentException("Password reset failed");
         }
     }
 }

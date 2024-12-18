@@ -42,4 +42,9 @@ public class AuthController {
         return "Password reset code sent successfully";
     }
 
+    @PostMapping("/reset-password")
+    public ValidatePasswordResetResponse resetPassword(@RequestBody ValidatePasswordResetRequest validatePasswordResetRequest){
+        return authService.resetPassword(validatePasswordResetRequest);
+    }
+
 }

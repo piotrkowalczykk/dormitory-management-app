@@ -35,7 +35,8 @@ public class SecurityConfig {
                 "/auth/validate-email",
                 "/auth/login",
                 "/auth/resend-email-verification-code",
-                "/auth/send-password-reset-code").permitAll().anyRequest().authenticated());
+                "/auth/send-password-reset-code",
+                "/auth/reset-password").permitAll().anyRequest().authenticated());
         httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
