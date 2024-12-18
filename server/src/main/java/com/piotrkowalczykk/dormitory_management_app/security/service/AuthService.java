@@ -7,5 +7,6 @@ public interface AuthService {
     public ValidateEmailResponse validateEmailVerificationCode(ValidateEmailRequest validateEmailRequest);
     public RegisterResponse registerUser(RegisterRequest registerRequest);
     public LoginResponse loginUser(LoginRequest loginRequest);
-    public void sendEmailVerificationCode(SendEmailRequest sendEmailRequest);
+    public void sendEmailVerificationCode(SendEmailCodeRequest sendEmailCodeRequest);
+    public void sendResetPasswordCode(SendEmailCodeRequest sendEmailCodeRequest);
 }

@@ -113,8 +113,8 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public void sendEmailVerificationCode(SendEmailRequest sendEmailRequest){
-        Optional<AuthUser> user = authUserRepository.findByEmail(sendEmailRequest.getEmail());
+    public void sendEmailVerificationCode(SendEmailCodeRequest sendEmailCodeRequest){
+        Optional<AuthUser> user = authUserRepository.findByEmail(sendEmailCodeRequest.getEmail());
         if(user.isPresent() && !user.get().isEmailVerified()){
             String emailCode = generateEmailVerificationCode();
             String hashedEmailCode = passwordEncoder.encode(emailCode);
@@ -126,13 +126,37 @@ public class AuthServiceImpl implements AuthService{
             String content = String.format("Enter this code to verify your email: %s. The code will expire in %s minutes.", emailCode, DURATION_IN_MINUTES);
 
             try {
-                emailService.sendEmail(sendEmailRequest.getEmail(), subject, content);
+                emailService.sendEmail(sendEmailCodeRequest.getEmail(), subject, content);
             } catch (MessagingException e) {
                 throw new EmailSendingException("Error sending verification email");
             }
 
         } else {
             throw new IllegalArgumentException("Email verification token failed, or email is already verified");
+        }
+    }
+
+    @Override
+    public void sendResetPasswordCode(SendEmailCodeRequest sendEmailCodeRequest) {
+        String passwordResetCode = generateEmailVerificationCode();
+        String hashedPasswordResetCode = passwordEncoder.encode(passwordResetCode);
+
+        Optional<AuthUser> user = authUserRepository.findByEmail(sendEmailCodeRequest.getEmail());
+        if(user.isPresent()) {
+            user.get().setPasswordResetCode(hashedPasswordResetCode);
+            user.get().setPasswordResetCodeExpiryDate(LocalDateTime.now().plusMinutes(DURATION_IN_MINUTES));
+            authUserRepository.save(user.get());
+
+            String subject = "Password Reset";
+            String content = String.format("Enter this code to reset your password: %s. The code will expire in %s minutes.", passwordResetCode, DURATION_IN_MINUTES);
+
+            try {
+                emailService.sendEmail(sendEmailCodeRequest.getEmail(), subject, content);
+            } catch (MessagingException e) {
+                throw new EmailSendingException("Error sending password reset email");
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
         }
     }
 }

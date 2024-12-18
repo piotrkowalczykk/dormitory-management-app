@@ -20,7 +20,7 @@ public class AuthController {
         return authService.registerUser(registerRequest);
     }
 
-    @PutMapping("/validate-email")
+    @PostMapping("/validate-email")
     public ValidateEmailResponse validateEmail(@RequestBody ValidateEmailRequest validateEmailRequest){
         return authService.validateEmailVerificationCode(validateEmailRequest);
     }
@@ -31,8 +31,15 @@ public class AuthController {
     }
 
     @PostMapping("/resend-email-verification-code")
-    public String resendEmailVerificationCode(@RequestBody SendEmailRequest sendEmailRequest){
-        authService.sendEmailVerificationCode(sendEmailRequest);
+    public String resendEmailVerificationCode(@RequestBody SendEmailCodeRequest sendEmailCodeRequest){
+        authService.sendEmailVerificationCode(sendEmailCodeRequest);
         return "Email verification code sent successfully";
     }
+
+    @PostMapping("/send-password-reset-code")
+    public String sendPasswordResetCode(@RequestBody SendEmailCodeRequest sendEmailCodeRequest){
+        authService.sendResetPasswordCode(sendEmailCodeRequest);
+        return "Password reset code sent successfully";
+    }
+
 }

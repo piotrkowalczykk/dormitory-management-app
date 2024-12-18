@@ -16,6 +16,8 @@ public class AuthUser {
     @Column(unique = true)
     private String email;
     private String password;
+    private String passwordResetCode = null;
+    private LocalDateTime passwordResetCodeExpiryDate = null;
     private String firstName;
     private String lastName;
     @Enumerated(EnumType.STRING)
@@ -30,12 +32,15 @@ public class AuthUser {
     inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
-    public AuthUser(long id, String email, String password, String firstName, String lastName,
+    public AuthUser(long id, String email, String password, String passwordResetCode,
+                    LocalDateTime passwordResetCodeExpiryDate, String firstName, String lastName,
                     Gender gender, LocalDate dateOfBirth, LocalDate createdAt, boolean emailVerified,
                     String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, List<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.passwordResetCode = passwordResetCode;
+        this.passwordResetCodeExpiryDate = passwordResetCodeExpiryDate;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -73,6 +78,22 @@ public class AuthUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordResetCode() {
+        return passwordResetCode;
+    }
+
+    public void setPasswordResetCode(String passwordResetCode) {
+        this.passwordResetCode = passwordResetCode;
+    }
+
+    public LocalDateTime getPasswordResetCodeExpiryDate() {
+        return passwordResetCodeExpiryDate;
+    }
+
+    public void setPasswordResetCodeExpiryDate(LocalDateTime passwordResetCodeExpiryDate) {
+        this.passwordResetCodeExpiryDate = passwordResetCodeExpiryDate;
     }
 
     public String getFirstName() {

@@ -1,9 +1,9 @@
 package com.piotrkowalczykk.dormitory_management_app.security.dto;
 
-public class SendEmailRequest {
+public class SendEmailCodeRequest {
     private String email;
 
-    public SendEmailRequest(String email) {
+    public SendEmailCodeRequest(String email) {
         this.email = email;
     }
 
