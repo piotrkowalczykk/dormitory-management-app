@@ -66,6 +66,8 @@ public class AuthServiceImpl implements AuthService{
             throw new CustomAuthenticationException("Email does not exist");
         } else if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())){
             throw new CustomAuthenticationException("Invalid password");
+        } else if (!user.get().isEmailVerified()){
+            throw new CustomAuthenticationException("Email is not verified");
         }
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
