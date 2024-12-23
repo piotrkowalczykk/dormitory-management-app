@@ -25,9 +25,13 @@ public class GlobalExceptionController{
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .collect(Collectors.joining(", "));
         } else if (exception instanceof HttpMessageNotReadableException) {
-            errorMessage += "dateOfBirth: invalid date format";
+            if(exception.getMessage().contains("Gender")){
+                errorMessage = "Invalid gender format. Expected MALE or FEMALE";
+            } else if (exception.getMessage().contains("LocalDate")){
+                errorMessage = "Invalid date format. Expected yyyy-MM-dd";
+            }
         } else {
-            errorMessage = "unexpected error occurred.";
+            errorMessage = exception.getMessage();
         }
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -37,9 +41,9 @@ public class GlobalExceptionController{
     public ResponseEntity<ResponseGlobalException> handleDataIntegrityViolationException(DataIntegrityViolationException exception){
         String errorMessage = exception.getMessage();
         if(errorMessage.contains("duplicate")){
-            errorMessage = "email: email address is already in use";
+            errorMessage += "email: email address is already in use";
         } else {
-            errorMessage = "data integrity violation";
+            errorMessage += "data integrity violation";
         }
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

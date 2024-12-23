@@ -1,19 +1,17 @@
 package com.piotrkowalczykk.dormitory_management_app.security.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.piotrkowalczykk.dormitory_management_app.security.model.Gender;
 import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 public class RegisterRequest {
 
-    @Email(message = "email address is not valid")
     @NotBlank(message = "email address is mandatory")
+    @Email(message = "email address is not valid")
     private String email;
-    @Size(min = 8, message = "password must be at least 8 characters")
     @NotBlank(message = "password is mandatory")
+    @Size(min = 8, message = "password must be at least 8 characters")
     private String password;
     @NotBlank(message = "first name is mandatory")
     private String firstName;
@@ -21,9 +19,8 @@ public class RegisterRequest {
     private String lastName;
     @NotNull(message = "gender is mandatory")
     private Gender gender;
-    @Past(message = "date of birth is not valid")
     @NotNull(message = "date of birth is mandatory")
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @Past(message = "date of birth is not valid")
     private LocalDate dateOfBirth;
 
     public RegisterRequest(String email, String password, String firstName, String lastName, Gender gender, LocalDate dateOfBirth) {
