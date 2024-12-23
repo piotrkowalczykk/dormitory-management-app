@@ -7,11 +7,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -21,9 +25,20 @@ public class GlobalExceptionController{
         String errorMessage = "";
         if (exception instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException e = (MethodArgumentNotValidException) exception;
-            errorMessage = e.getBindingResult().getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
+            Map<String, String> errorDetails = new HashMap<>();
+            e.getBindingResult().getFieldErrors().forEach(error -> {
+                        if (errorDetails.containsKey(error.getField())){
+                            String existingMessages = errorDetails.get(error.getField());
+                            errorDetails.put(error.getField(), existingMessages + " " + error.getDefaultMessage());
+                        } else {
+                            errorDetails.put(error.getField(), error.getDefaultMessage());
+                        }
+                    }
+            );
+            if(errorDetails.get("password").contains("mandatory") && errorDetails.get("password").contains("characters")){
+                errorDetails.put("password", "password is mandatory");
+            }
+            errorMessage = errorDetails.entrySet().stream().map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.joining(", "));
         } else if (exception instanceof HttpMessageNotReadableException) {
             if(exception.getMessage().contains("Gender")){
                 errorMessage = "Invalid gender format. Expected MALE or FEMALE";
