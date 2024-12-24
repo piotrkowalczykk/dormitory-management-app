@@ -5,10 +5,14 @@ import { Footer } from '../Footer/Footer';
 
 export function Layout({children}: {children: ReactNode}){
     return(
-        <div className={classes.root}>
+        <>
+        <div className={classes.container}>
             <Header />
-            {children}
-            <Footer />
+            <div className={classes.main}>
+                {children}
+            </div>
         </div>
+        <Footer />
+        </>
     );
 }

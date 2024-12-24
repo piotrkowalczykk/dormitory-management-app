@@ -1,0 +1,11 @@
+.container{
+    width: 90%;
+    height: 15vh;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.logo{
+    height: 100%;
+}
