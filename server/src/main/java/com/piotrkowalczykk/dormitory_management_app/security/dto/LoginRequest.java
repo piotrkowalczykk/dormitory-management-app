@@ -1,6 +1,7 @@
 package com.piotrkowalczykk.dormitory_management_app.security.dto;
 
 public class LoginRequest {
+
     private String email;
     private String password;
 

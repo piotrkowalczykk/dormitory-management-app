@@ -2,7 +2,8 @@ import { Layout } from '../../components/Layout/Layout';
 import classes from './Register.module.css';
 import { Input } from '../../components/Input/Input';
 import { useState } from 'react';
-import { Button } from '../../components/Button/Buton';
+import { Button } from '../../components/Button/Button';
+import { Link } from 'react-router-dom';
 
 export function Register(){
 
@@ -87,7 +88,8 @@ export function Register(){
                         error={errors.email} onChange={handleInputChange} />
                         <Input type="password" placeholder="Password" value={formData.password} name="password"
                         error={errors.password} onChange={handleInputChange} />
-                        <Button type='submit'>Register</Button>
+                        <Button type="submit">Register</Button>
+                        <span className={classes.login}>Already on Dormitory? <Link to="/login" className={classes.link}>Log in</Link></span>
                 </form>
             </div>
         </Layout>
