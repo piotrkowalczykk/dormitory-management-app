@@ -3,16 +3,21 @@ import { Input } from '../../components/Input/Input';
 import { Layout } from '../../components/Layout/Layout';
 import { useState } from "react";
 import classes from './Login.module.css'
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthProvider';
 
 
 export function Login(){
 
-    const [formData, setFormData] = useState({
+    const navigate = useNavigate();
+    const { login } = useAuth();
+    const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState(
+        {
         email: "",
         password: "",
-    });
-
-    const [errors, setErrors] = useState({});
+        }
+    );
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -36,11 +41,15 @@ export function Login(){
 
             if (response.ok){
                 const data = await response.json();
-                alert(`${data.message}`);
+                login(data.token);
+                navigate("/");
             } else {
                 const errorData = await response.json();
 
                 const errorMessages = errorData.message.split(", ");
+                if(errorMessages == "email: email is not verified"){
+                    navigate("/email-varification")
+                }
                 let newErrors = {};
 
                 errorMessages.forEach((errorMessage) => {
