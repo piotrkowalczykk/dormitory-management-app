@@ -7,8 +7,8 @@ import { Login } from './authentication/pages/Login/Login'
 import { Register } from './authentication/pages/Register/Register'
 import { ResetPassword } from './authentication/pages/ResetPassword/ResetPassword'
 import { EmailVerification } from './authentication/pages/EmailVerification/EmailVerification'
-import { ProtectedRoute } from './authentication/ProtectedRoute'
-import { PublicRoute } from './authentication/PublicRoute'
+import { ProtectedRoute } from './authentication/Routes'
+import { PublicRoute } from './authentication/Routes'
 import { AuthProvider } from './authentication/AuthProvider'
 const router = createBrowserRouter([
   {

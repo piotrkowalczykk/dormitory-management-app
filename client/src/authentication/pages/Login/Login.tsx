@@ -21,10 +21,12 @@ export function Login(){
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-        setFormData({
+        setFormData(
+            {
             ...formData,
             [name]: value,
-        });
+            }
+        );
     };
 
     const handleSubmit = async (e) => {
@@ -37,20 +39,21 @@ export function Login(){
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(formData),
-                });
+                }
+            );
 
             if (response.ok){
                 const data = await response.json();
                 login(data.token);
                 navigate("/");
             } else {
+                let newErrors = {};
                 const errorData = await response.json();
-
                 const errorMessages = errorData.message.split(", ");
+
                 if(errorMessages == "email: email is not verified"){
                     navigate("/email-varification")
                 }
-                let newErrors = {};
 
                 errorMessages.forEach((errorMessage) => {
                     const [field, message] = errorMessage.split(": ");
@@ -59,7 +62,6 @@ export function Login(){
 
                 setErrors(newErrors);
             }
-
         } catch (error) {
             console.error("An unexpected error ocured", error);
         }

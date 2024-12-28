@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
 
     if (process.env.NODE_ENV === 'development') {
         window.logout = logout;
-      }
+    }
 
     return(
         <AuthContext.Provider value={{token, login, logout, isAuthenticated}}>

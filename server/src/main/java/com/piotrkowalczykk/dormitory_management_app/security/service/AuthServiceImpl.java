@@ -63,17 +63,17 @@ public class AuthServiceImpl implements AuthService{
         Optional<AuthUser> user = authUserRepository.findByEmail(loginRequest.getEmail());
 
         if(user.isEmpty() && !loginRequest.getEmail().isEmpty()){
-            throw new CustomAuthenticationException("email: email does not exist, ");
+            throw new CustomAuthenticationException("email: email does not exist");
         } else if (user.isEmpty() && loginRequest.getEmail().isEmpty()){
             if(loginRequest.getPassword().isEmpty()){
                 throw new CustomAuthenticationException("email: email address is mandatory, password: password is mandatory");
             } else {
-                throw new CustomAuthenticationException("email: email address is mandatory, ");
+                throw new CustomAuthenticationException("email: email address is mandatory");
             }
         } else if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())){
-            throw new CustomAuthenticationException("password: invalid password, ");
+            throw new CustomAuthenticationException("password: invalid password");
         } else if (!user.get().isEmailVerified()){
-            throw new CustomAuthenticationException("email: email is not verified, ");
+            throw new CustomAuthenticationException("email: email is not verified");
         }
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));

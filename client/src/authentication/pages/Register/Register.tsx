@@ -42,10 +42,9 @@ export function Register(){
                 const data = await response.json();
                 alert(`${data.message}`);
             } else {
-                const errorData = await response.json();
-
-                const errorMessages = errorData.message.split(", ");
                 let newErrors = {};
+                const errorData = await response.json();
+                const errorMessages = errorData.message.split(", ");
 
                 errorMessages.forEach((errorMessage) => {
                     const [field, message] = errorMessage.split(": ");
@@ -54,7 +53,6 @@ export function Register(){
 
                 setErrors(newErrors);
             }
-
         } catch (error) {
             console.error("An unexpected error ocured", error);
         }
