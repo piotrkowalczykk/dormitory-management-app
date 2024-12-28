@@ -8,8 +8,8 @@ interface BoxProps{
     btnName: string;
     title: string;
     text: string;
-    link: string;
-    linkName: string;
+    link?: string;
+    linkName?: string;
     children?: ReactNode;
 }
 

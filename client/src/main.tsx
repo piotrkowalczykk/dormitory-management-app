@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "/email-varification",
+    path: "/email-verification",
     element: <EmailVerification />
   }
 ])

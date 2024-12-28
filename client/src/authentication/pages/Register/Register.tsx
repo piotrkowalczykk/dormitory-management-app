@@ -3,7 +3,7 @@ import classes from './Register.module.css';
 import { Input } from '../../components/Input/Input';
 import { useState } from 'react';
 import { Button } from '../../components/Button/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Register(){
 
@@ -16,14 +16,17 @@ export function Register(){
         dateOfBirth: ""
     });
 
+    const navigate = useNavigate();
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-        setFormData({
+        setFormData(
+            {
             ...formData,
             [name]: value,
-        });
+            }
+        );
     };
 
     const handleSubmit = async (e) => {
@@ -40,11 +43,13 @@ export function Register(){
 
             if (response.ok){
                 const data = await response.json();
+                navigate("/email-verification");
                 alert(`${data.message}`);
             } else {
                 let newErrors = {};
                 const errorData = await response.json();
                 const errorMessages = errorData.message.split(", ");
+                console.log(errorData);
 
                 errorMessages.forEach((errorMessage) => {
                     const [field, message] = errorMessage.split(": ");

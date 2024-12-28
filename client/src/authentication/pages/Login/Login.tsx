@@ -52,7 +52,7 @@ export function Login(){
                 const errorMessages = errorData.message.split(", ");
 
                 if(errorMessages == "email: email is not verified"){
-                    navigate("/email-varification")
+                    navigate("/email-verification")
                 }
 
                 errorMessages.forEach((errorMessage) => {
