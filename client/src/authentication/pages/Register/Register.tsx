@@ -43,6 +43,7 @@ export function Register(){
 
             if (response.ok){
                 const data = await response.json();
+                localStorage.setItem("email", formData.email);
                 navigate("/email-verification");
                 alert(`${data.message}`);
             } else {

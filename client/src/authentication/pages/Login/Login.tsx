@@ -5,6 +5,7 @@ import { useState } from "react";
 import classes from './Login.module.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthProvider';
+import { Button } from '../../components/Button/Button';
 
 
 export function Login(){
@@ -34,6 +35,7 @@ export function Login(){
         setErrors({});
 
         try {
+            console.log(formData.email);
             const response = await fetch("http://localhost:8080/auth/login", 
                 {
                 method: "POST",
@@ -52,6 +54,7 @@ export function Login(){
                 const errorMessages = errorData.message.split(", ");
 
                 if(errorMessages == "email: email is not verified"){
+                    localStorage.setItem("email", formData.email);
                     navigate("/email-verification")
                 }
 
@@ -70,13 +73,14 @@ export function Login(){
     return(
         <Layout>
             <form onSubmit={handleSubmit} className={classes.form}>
-            <Box type='submit' btnName='Log in' title='Hello Again!'
+            <Box title='Hello Again!'
              text='Is this your first time on Dormitory?' linkName='Join now'
              link='/register'>
                 <Input type="text" placeholder="Email" value={formData.email} name="email"
                     error={errors.email} onChange={handleInputChange} />
                 <Input type="password" placeholder="Password" value={formData.password} name="password"
                     error={errors.password} onChange={handleInputChange} />
+                    <Button type='submit'>Log in</Button>
              </Box>
              </form>
         </Layout>
