@@ -33,8 +33,11 @@ public class GlobalExceptionController{
                         }
                     }
             );
-            if(errorDetails.get("password").contains("mandatory") && errorDetails.get("password").contains("characters")){
-                errorDetails.put("password", "password is mandatory");
+            if (errorDetails.containsKey("password") && errorDetails.get("password") != null) {
+                String passwordError = errorDetails.get("password");
+                if (passwordError.contains("mandatory") && passwordError.contains("characters")) {
+                    errorDetails.put("password", "password is mandatory");
+                }
             }
             errorMessage = errorDetails.entrySet().stream().map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.joining(", "));
         } else if (exception instanceof HttpMessageNotReadableException) {
@@ -54,9 +57,9 @@ public class GlobalExceptionController{
     public ResponseEntity<ResponseGlobalException> handleDataIntegrityViolationException(DataIntegrityViolationException exception){
         String errorMessage = exception.getMessage();
         if(errorMessage.contains("duplicate")){
-            errorMessage += "email: email address is already in use";
+            errorMessage = "email: email address is already in use";
         } else {
-            errorMessage += "data integrity violation";
+            errorMessage = "data integrity violation";
         }
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
