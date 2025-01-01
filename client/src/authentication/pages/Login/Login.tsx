@@ -3,7 +3,7 @@ import { Input } from '../../components/Input/Input';
 import { Layout } from '../../components/Layout/Layout';
 import { useState } from "react";
 import classes from './Login.module.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthProvider';
 import { Button } from '../../components/Button/Button';
 
@@ -81,6 +81,7 @@ export function Login(){
                 <Input type="password" placeholder="Password" value={formData.password} name="password"
                     error={errors.password} onChange={handleInputChange} />
                     <Button type='submit'>Log in</Button>
+             <Link to="/reset-password" className={classes.link}>I forgot my password</Link>
              </Box>
              </form>
         </Layout>

@@ -3,6 +3,7 @@ package com.piotrkowalczykk.dormitory_management_app.security.controller;
 import com.piotrkowalczykk.dormitory_management_app.security.dto.*;
 import com.piotrkowalczykk.dormitory_management_app.security.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,14 +39,13 @@ public class AuthController {
     }
 
     @PostMapping("/send-password-reset-code")
-    public String sendPasswordResetCode(@RequestBody SendEmailCodeRequest sendEmailCodeRequest){
+    public ResponseEntity<String> sendPasswordResetCode(@RequestBody @Valid SendEmailCodeRequest sendEmailCodeRequest){
         authService.sendResetPasswordCode(sendEmailCodeRequest);
-        return "Password reset code sent successfully";
+        return ResponseEntity.ok("Reset password code sent successfully");
     }
 
     @PostMapping("/reset-password")
-    public ValidatePasswordResetResponse resetPassword(@RequestBody ValidatePasswordResetRequest validatePasswordResetRequest){
+    public ValidatePasswordResetResponse resetPassword(@RequestBody @Valid ValidatePasswordResetRequest validatePasswordResetRequest){
         return authService.resetPassword(validatePasswordResetRequest);
     }
-
 }

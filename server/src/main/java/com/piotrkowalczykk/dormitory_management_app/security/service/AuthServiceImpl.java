@@ -124,9 +124,9 @@ public class AuthServiceImpl implements AuthService{
             authUserRepository.save(user.get());
             return new ValidateEmailResponse("Email verified successfully");
         } else if (user.isPresent() && passwordEncoder.matches(validateEmailRequest.getEmailCode(), user.get().getEmailVerificationCode()) && user.get().getEmailVerificationCodeExpiryDate().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("Email verification code expired");
+            throw new IllegalArgumentException("email: email verification code expired");
         } else {
-            throw new IllegalArgumentException("Email verification failed");
+            throw new IllegalArgumentException("email: email verification failed");
         }
     }
 
@@ -146,11 +146,11 @@ public class AuthServiceImpl implements AuthService{
             try {
                 emailService.sendEmail(sendEmailCodeRequest.getEmail(), subject, content);
             } catch (MessagingException e) {
-                throw new EmailSendingException("Error sending verification email");
+                throw new EmailSendingException("email: error sending verification email");
             }
 
         } else {
-            throw new IllegalArgumentException("Email verification token failed, or email is already verified");
+            throw new IllegalArgumentException("email: email verification code failed, or email is already verified");
         }
     }
 
@@ -174,7 +174,7 @@ public class AuthServiceImpl implements AuthService{
                 throw new EmailSendingException("Error sending password reset email");
             }
         } else {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("email: user not found");
         }
     }
 
@@ -188,9 +188,9 @@ public class AuthServiceImpl implements AuthService{
             authUserRepository.save(user.get());
             return new ValidatePasswordResetResponse("Password reset successfully");
         } else if (user.isPresent() && passwordEncoder.matches(validatePasswordResetRequest.getEmailCode(), user.get().getPasswordResetCode()) && user.get().getPasswordResetCodeExpiryDate().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("Password reset code expired");
+            throw new IllegalArgumentException("emailCode: password reset code expired");
         } else {
-            throw new IllegalArgumentException("Password reset failed");
+            throw new IllegalArgumentException("emailCode: password reset failed");
         }
     }
 }

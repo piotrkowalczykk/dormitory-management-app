@@ -27,6 +27,7 @@ public class AuthUser {
     private boolean emailVerified = false;
     private String emailVerificationCode = null;
     private LocalDateTime emailVerificationCodeExpiryDate;
+    private String academy = null;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
@@ -35,7 +36,7 @@ public class AuthUser {
     public AuthUser(long id, String email, String password, String passwordResetCode,
                     LocalDateTime passwordResetCodeExpiryDate, String firstName, String lastName,
                     Gender gender, LocalDate dateOfBirth, LocalDate createdAt, boolean emailVerified,
-                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, List<Role> roles) {
+                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, String academy, List<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -49,6 +50,7 @@ public class AuthUser {
         this.emailVerified = emailVerified;
         this.emailVerificationCode = emailVerificationCode;
         this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
+        this.academy = academy;
         this.roles = roles;
     }
 
@@ -158,6 +160,14 @@ public class AuthUser {
 
     public void setEmailVerificationCodeExpiryDate(LocalDateTime emailVerificationCodeExpiryDate) {
         this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
+    }
+
+    public String getAcademy() {
+        return academy;
+    }
+
+    public void setAcademy(String academy) {
+        this.academy = academy;
     }
 
     public List<Role> getRoles() {
