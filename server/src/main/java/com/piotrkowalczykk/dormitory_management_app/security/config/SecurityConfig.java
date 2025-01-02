@@ -1,5 +1,6 @@
 package com.piotrkowalczykk.dormitory_management_app.security.config;
 
+import com.piotrkowalczykk.dormitory_management_app.security.utils.JsonWebToken;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,12 +18,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JsonWebToken jsonWebToken;
     private final JWTAuthEntryPoint jwtAuthEntryPoint;
     private final CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JWTAuthEntryPoint jwtAuthEntryPoint) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JWTAuthEntryPoint jwtAuthEntryPoint, JsonWebToken jsonWebToken) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
+        this.jsonWebToken = jsonWebToken;
     }
 
     @Bean
@@ -30,15 +33,12 @@ public class SecurityConfig {
         httpSecurity.csrf(customizer -> customizer.disable());
         httpSecurity.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(
-                "/auth/register",
-                "/auth/validate-email",
-                "/auth/login",
-                "/auth/resend-email-verification-code",
-                "/auth/send-password-reset-code",
-                "/auth/reset-password").permitAll().anyRequest().authenticated());
+        httpSecurity.authorizeHttpRequests(request -> request
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/feed/**").hasAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated());
         httpSecurity.httpBasic(Customizer.withDefaults());
-        httpSecurity.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtAuthFilter(jsonWebToken, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -48,8 +48,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JWTAuthFilter jwtAuthFilter(){
-        return new JWTAuthFilter();
+    public JWTAuthFilter jwtAuthFilter(JsonWebToken jsonWebToken, CustomUserDetailsService customUserDetailsService){
+        return new JWTAuthFilter(jsonWebToken, customUserDetailsService);
     }
 
     @Bean
