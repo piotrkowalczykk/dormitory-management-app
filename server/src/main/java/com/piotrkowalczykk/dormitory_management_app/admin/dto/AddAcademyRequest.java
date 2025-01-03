@@ -1,15 +1,31 @@
 package com.piotrkowalczykk.dormitory_management_app.admin.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 public class AddAcademyRequest {
+    @NotBlank(message = "name is mandatory")
     private String name;
+    @NotBlank(message = "description is mandatory")
     private String description;
+    @NotBlank(message = "logo is mandatory")
     private String logo;
+    @NotBlank(message = "city is mandatory")
     private String city;
+    @NotBlank(message = "address is mandatory")
     private String address;
+    @NotBlank(message = "postal code is mandatory")
     private String postalCode;
+    @NotBlank(message = "country is mandatory")
     private String country;
+    @NotBlank(message = "phone number is mandatory")
+    @Pattern(regexp = "^[0-9]{9,15}$", message = "phone number must be between 9 and 15 digits")
     private String phone;
+    @NotBlank(message = "website address is mandatory")
     private String website;
+    @NotBlank(message = "email address is mandatory")
+    @Email(message = "email address is not valid")
     private String email;
 
     public AddAcademyRequest(String name, String description, String logo, String city, String address, String postalCode, String country, String phone, String website, String email) {
