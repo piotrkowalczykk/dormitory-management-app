@@ -1,7 +1,9 @@
 package com.piotrkowalczykk.dormitory_management_app.security.model;
 
+import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import jakarta.persistence.*;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +29,8 @@ public class AuthUser {
     private boolean emailVerified = false;
     private String emailVerificationCode = null;
     private LocalDateTime emailVerificationCodeExpiryDate;
-    private String academy = null;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Academy academy = null;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
@@ -36,7 +39,7 @@ public class AuthUser {
     public AuthUser(long id, String email, String password, String passwordResetCode,
                     LocalDateTime passwordResetCodeExpiryDate, String firstName, String lastName,
                     Gender gender, LocalDate dateOfBirth, LocalDate createdAt, boolean emailVerified,
-                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, String academy, List<Role> roles) {
+                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, Academy academy, List<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -162,11 +165,11 @@ public class AuthUser {
         this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
     }
 
-    public String getAcademy() {
+    public Academy getAcademy() {
         return academy;
     }
 
-    public void setAcademy(String academy) {
+    public void setAcademy(Academy academy) {
         this.academy = academy;
     }
 

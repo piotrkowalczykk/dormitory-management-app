@@ -1,11 +1,10 @@
 package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.SelectAcademyRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +22,11 @@ public class FeedController {
     public ResponseEntity<List<Academy>> getAllAcademies(){
        List<Academy> listOfAcademies = feedService.getAllAcademies();
        return ResponseEntity.ok(listOfAcademies);
+    }
+
+    @PostMapping("/select-academy")
+    public ResponseEntity<String> selectAcademy(@RequestBody SelectAcademyRequest selectAcademyRequest){
+        feedService.selectAcademy(selectAcademyRequest);
+        return ResponseEntity.ok("Academy selected successfully");
     }
 }
