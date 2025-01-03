@@ -1,0 +1,9 @@
+package com.piotrkowalczykk.dormitory_management_app.feed.service;
+
+import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
+
+import java.util.List;
+
+public interface FeedService {
+    public List<Academy> getAllAcademies();
+}
