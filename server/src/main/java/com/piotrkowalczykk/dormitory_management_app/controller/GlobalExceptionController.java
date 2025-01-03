@@ -1,4 +1,4 @@
-package com.piotrkowalczykk.dormitory_management_app.security.controller;
+package com.piotrkowalczykk.dormitory_management_app.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
