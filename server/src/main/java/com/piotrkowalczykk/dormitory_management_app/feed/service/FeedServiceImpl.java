@@ -6,6 +6,7 @@ import com.piotrkowalczykk.dormitory_management_app.feed.dto.SelectAcademyReques
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
 import com.piotrkowalczykk.dormitory_management_app.feed.exception.AcademyNotSelectedException;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
+import com.piotrkowalczykk.dormitory_management_app.security.model.Role;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.utils.JsonWebToken;
 import org.slf4j.Logger;
@@ -37,6 +38,9 @@ public class FeedServiceImpl implements FeedService{
         AuthUser user = authUserRepository.findByEmail(selectAcademyRequest.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        boolean isAdmin = user.getRoles().stream().anyMatch(role -> "ADMIN".equalsIgnoreCase(role.getName()));
+        if(isAdmin) return;
+
         Academy academy = academyRepository.findById(selectAcademyRequest.getAcademyId())
                 .orElseThrow(() -> new IllegalArgumentException("Academy not found"));
 
@@ -51,6 +55,20 @@ public class FeedServiceImpl implements FeedService{
 
         AuthUser user = authUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        boolean isAdmin = user.getRoles().stream().anyMatch(role -> "ADMIN".equalsIgnoreCase(role.getName()));
+
+        if(isAdmin){
+            return new UserDetailsResponse(
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getGender(),
+                    user.getDateOfBirth(),
+                    null,
+                    user.getRoles()
+            );
+        }
 
         Academy academy = user.getAcademy();
         if (academy == null) throw new AcademyNotSelectedException("User has an unselected academy");
