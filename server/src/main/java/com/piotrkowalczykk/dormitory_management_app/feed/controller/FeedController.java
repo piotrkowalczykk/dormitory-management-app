@@ -2,6 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.SelectAcademyRequest;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,11 @@ public class FeedController {
 
     public FeedController(FeedService feedService) {
         this.feedService = feedService;
+    }
+
+    @GetMapping("/me")
+    public UserDetailsResponse getUserDetails(@RequestHeader("Authorization") String authHeader){
+        return feedService.getUserDetails(authHeader);
     }
 
     @GetMapping("/academies")

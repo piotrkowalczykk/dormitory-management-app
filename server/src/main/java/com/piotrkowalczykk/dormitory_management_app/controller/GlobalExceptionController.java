@@ -1,5 +1,6 @@
 package com.piotrkowalczykk.dormitory_management_app.controller;
 
+import com.piotrkowalczykk.dormitory_management_app.feed.exception.AcademyNotSelectedException;
 import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
@@ -81,6 +82,13 @@ public class GlobalExceptionController{
 
     @ExceptionHandler(CustomAuthenticationException.class)
     public ResponseEntity<ResponseGlobalException> handleCustomAuthenticationException(CustomAuthenticationException exception){
+        String errorMessage = exception.getMessage();
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDate.now());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AcademyNotSelectedException.class)
+    public ResponseEntity<ResponseGlobalException> handleAcademyNotSelectedException(AcademyNotSelectedException exception){
         String errorMessage = exception.getMessage();
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
