@@ -1,5 +1,6 @@
 package com.piotrkowalczykk.dormitory_management_app.security.service;
 
+import com.piotrkowalczykk.dormitory_management_app.customer.repository.StudentRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.dto.*;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
@@ -33,16 +34,18 @@ public class AuthServiceImpl implements AuthService{
     private final EmailService emailService;
     private final AuthUserRepository authUserRepository;
     private final RoleRepository roleRepository;
+    private final StudentRepository studentRepository;
     private final AuthenticationManager authenticationManager;
     private final JsonWebToken jsonWebToken;
     private static final int DURATION_IN_MINUTES = 1;
     private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder, EmailService emailService, AuthUserRepository authUserRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, EmailService emailService, AuthUserRepository authUserRepository, RoleRepository roleRepository, StudentRepository studentRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
         this.passwordEncoder = passwordEncoder;
         this.authUserRepository = authUserRepository;
         this.emailService = emailService;
         this.roleRepository = roleRepository;
+        this.studentRepository = studentRepository;
         this.authenticationManager = authenticationManager;
         this.jsonWebToken = jsonWebToken;
     }
@@ -84,6 +87,9 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest){
+
+        if(!studentRepository.existsByEmail(registerRequest.getEmail()))
+            throw new IllegalArgumentException("email: There is no student with this email address");
 
         String emailCode = generateEmailVerificationCode();
         String hashedEmailCode = passwordEncoder.encode(emailCode);

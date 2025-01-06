@@ -71,7 +71,6 @@ public class FeedServiceImpl implements FeedService{
         }
 
         Academy academy = user.getAcademy();
-        if (academy == null) throw new AcademyNotSelectedException("User has an unselected academy");
 
         return new UserDetailsResponse(
                 user.getEmail(),
@@ -79,7 +78,7 @@ public class FeedServiceImpl implements FeedService{
                 user.getLastName(),
                 user.getGender(),
                 user.getDateOfBirth(),
-                academy.getName(),
+                academy != null ? academy.getName() : null,
                 user.getRoles()
         );
     }
