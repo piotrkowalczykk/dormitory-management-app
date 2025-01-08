@@ -29,10 +29,4 @@ public class FeedController {
        List<Academy> listOfAcademies = feedService.getAllAcademies();
        return ResponseEntity.ok(listOfAcademies);
     }
-
-    @PostMapping("/select-academy")
-    public ResponseEntity<String> selectAcademy(@RequestBody SelectAcademyRequest selectAcademyRequest){
-        feedService.selectAcademy(selectAcademyRequest);
-        return ResponseEntity.ok("Academy selected successfully");
-    }
 }

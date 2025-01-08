@@ -29,8 +29,8 @@ public class AuthUser {
     private boolean emailVerified = false;
     private String emailVerificationCode = null;
     private LocalDateTime emailVerificationCodeExpiryDate;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Academy academy = null;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Academy academy;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))

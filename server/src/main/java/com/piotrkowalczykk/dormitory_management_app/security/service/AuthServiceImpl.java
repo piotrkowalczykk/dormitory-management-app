@@ -1,6 +1,10 @@
 package com.piotrkowalczykk.dormitory_management_app.security.service;
 
+import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
+import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.StudentRepository;
+import com.piotrkowalczykk.dormitory_management_app.feed.exception.AcademyNotFoundException;
 import com.piotrkowalczykk.dormitory_management_app.security.dto.*;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
@@ -32,6 +36,7 @@ public class AuthServiceImpl implements AuthService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final AcademyRepository academyRepository;
     private final AuthUserRepository authUserRepository;
     private final RoleRepository roleRepository;
     private final StudentRepository studentRepository;
@@ -40,8 +45,9 @@ public class AuthServiceImpl implements AuthService{
     private static final int DURATION_IN_MINUTES = 1;
     private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder, EmailService emailService, AuthUserRepository authUserRepository, RoleRepository roleRepository, StudentRepository studentRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, EmailService emailService, AcademyRepository academyRepository, AuthUserRepository authUserRepository, RoleRepository roleRepository, StudentRepository studentRepository, AuthenticationManager authenticationManager, JsonWebToken jsonWebToken) {
         this.passwordEncoder = passwordEncoder;
+        this.academyRepository = academyRepository;
         this.authUserRepository = authUserRepository;
         this.emailService = emailService;
         this.roleRepository = roleRepository;
@@ -88,8 +94,8 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public RegisterResponse registerUser(RegisterRequest registerRequest){
 
-        if(!studentRepository.existsByEmail(registerRequest.getEmail()))
-            throw new IllegalArgumentException("email: There is no student with this email address");
+        Student student = studentRepository.findByEmail(registerRequest.getEmail())
+                .orElseThrow(()-> new IllegalArgumentException("email: There is no student with this email address"));
 
         String emailCode = generateEmailVerificationCode();
         String hashedEmailCode = passwordEncoder.encode(emailCode);
@@ -106,6 +112,8 @@ public class AuthServiceImpl implements AuthService{
         authUser.setEmailVerificationCodeExpiryDate(LocalDateTime.now().plusMinutes(DURATION_IN_MINUTES));
         Role roles = roleRepository.findByName("USER").get();
         authUser.setRoles(Collections.singletonList(roles));
+        Academy academy = student.getAcademy();
+        authUser.setAcademy(academy);
         authUserRepository.save(authUser);
 
         String subject = "Email Verification";
