@@ -46,8 +46,36 @@ export function Login(){
 
             if (response.ok){
                 const data = await response.json();
-                login(data.token);
-                navigate("/");
+                try {
+                    const response = await fetch("http://localhost:8080/feed/me", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${data.token}`,
+                        },
+                    });
+        
+                    if (response.ok) {
+                        const userData = await response.json();
+                        const userDetailsToSave = {
+                            email: userData.email,
+                            firstName: userData.firstName,
+                            lastName: userData.lastName,
+                            gender: userData.gender,
+                            dateOfBirth: userData.dateOfBirth,
+                            academyName: userData.academyName,
+                            roles: userData.roles,
+                        };
+                        login(data.token, userDetailsToSave);
+                        navigate("/");
+                    } else {
+                        const errorData = await response.json();
+                        const errorMessages = errorData.message.split(", ");       
+                        console.log(errorMessages);
+                    }
+                } catch (error) {
+                    console.error("An unexpected error occurred", error);
+                }
             } else {
                 let newErrors = {};
                 const errorData = await response.json();
@@ -55,7 +83,7 @@ export function Login(){
 
                 if(errorMessages == "email: email is not verified"){
                     localStorage.setItem("email", formData.email);
-                    navigate("/email-verification")
+                    navigate("/email-verification");
                 }
 
                 errorMessages.forEach((errorMessage) => {

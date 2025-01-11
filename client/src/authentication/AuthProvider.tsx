@@ -1,34 +1,61 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect} from "react";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({children}) => {
     const [token, setToken] = useState(() => localStorage.getItem("token"));
-    const [user, setUser] = useState()
+    const [userDetails, setUserDetails] = useState(() => {
+        const savedDetails = localStorage.getItem("userDetails");
+        return savedDetails ? JSON.parse(savedDetails) : {
+            email: "",
+            firstName: "",
+            lastName: "",
+            gender: "",
+            dateOfBirth: "",
+            academyName: "",
+            roles: [],
+        };
+    });
 
-    const login = async (token) => {
+    const isAuthenticated = !!token;
+
+    const login = (token, userData) => {
         setToken(token);
         localStorage.setItem("token", token);
-    }
+
+        setUserDetails(userData);
+        localStorage.setItem("userDetails", JSON.stringify(userData));
+    };
+
 
     const logout = () => {
         setToken(null);
-        localStorage.removeItem("token");
-    }
+        setUserDetails({
+            email: "",
+            firstName: "",
+            lastName: "",
+            gender: "",
+            dateOfBirth: "",
+            academyName: "",
+            roles: [],
+        });
 
-    const isAuthenticated = !!token;
+        localStorage.removeItem("token");
+        localStorage.removeItem("userDetails");
+    };
+
 
     if (process.env.NODE_ENV === 'development') {
         window.logout = logout;
     }
 
-    return(
-        <AuthContext.Provider value={{token, login, logout, isAuthenticated}}>
+    return (
+        <AuthContext.Provider value={{ token, login, logout, isAuthenticated, userDetails}}>
             {children}
         </AuthContext.Provider>
-    )
-} 
+    );
+};
 
 export const useAuth = () => {
     return useContext(AuthContext);
-}
+};

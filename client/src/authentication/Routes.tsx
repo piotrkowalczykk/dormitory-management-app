@@ -3,10 +3,10 @@ import { useAuth } from "./AuthProvider";
 
 export const PublicRoute = ({children}) => 
 {
-    const {isAuthenticated} = useAuth();
+    const {isAuthenticated, userDetails} = useAuth();
 
-    if(isAuthenticated){
-        return <Navigate to="/" replace />;
+    if(isAuthenticated && userDetails){
+            return <Navigate to="/" replace />;
     }
 
     return children;
