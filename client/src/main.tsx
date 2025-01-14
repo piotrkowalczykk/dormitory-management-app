@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Feed } from './feed/pages/Feed'
+import { Home } from './feed/pages/Home/Home'
 import { Login } from './authentication/pages/Login/Login'
 import { Register } from './authentication/pages/Register/Register'
 import { ResetPassword } from './authentication/pages/ResetPassword/ResetPassword'
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute>
-        <Feed />
+        <Home />
       </ProtectedRoute>
     ),
   },
