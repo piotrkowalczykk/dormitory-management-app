@@ -4,50 +4,55 @@
     justify-content: space-between;
     box-sizing: border-box;
     height: 10vh;
-    background-color: aqua;
+    background-image: url("/background.jpg");
 }
-
 .logo{
     height: 100%;
     margin-left: 1rem;
 }
 .container a {
+    display: flex;
     height: 100%;
 }
 .nav{
-
+    height: 90%;
+    max-width: 500px;
+    width: 40%;
 }
-.btns{
-    margin-right: 1rem;
-}
-
 .nav ul{
+    height: 100%;
     display: flex;
+    width: 100%;
 }
 .nav ul li{
-    list-style: none;
-}
-
-.nav ul li a{
-    display: block;
-    text-decoration: none;
-    padding: 0.5rem;
-    margin: 0.5rem;
-}
-
-.menu {
     display: flex;
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 2.25rem;
-    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    width: 35%;
+}
+.nav ul li:hover{
+    background-color: rgb(86, 94, 86, 0.2);
+}
+.nav ul li a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.icons{
+    font-size: 1.5rem;
+}
+.icons.activeIcon{
+    color: white;
+    border-bottom: 3px solid white;
+}
+.avatar{
+    border: 1px solid black;
+    border-radius: 10rem;
+    background-color: yellow;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 1em;
 }
 
-.menu span {
-    height: 0.4rem;
-    width: 100%;
-    background-color: white;
-}

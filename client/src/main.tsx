@@ -10,12 +10,29 @@ import { EmailVerification } from './authentication/pages/EmailVerification/Emai
 import { ProtectedRoute } from './authentication/Routes'
 import { PublicRoute } from './authentication/Routes'
 import { AuthProvider } from './authentication/AuthProvider'
+import { Dashboard } from './feed/pages/Dashboard/Dashboard'
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/community",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
       </ProtectedRoute>
     ),
   },

@@ -1,5 +1,10 @@
 import { Link, NavLink } from 'react-router-dom'
 import classes from './Nav.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
+
 
 export function Nav(){
     return (
@@ -7,25 +12,26 @@ export function Nav(){
             <Link to="/">
                 <img src='logo.png' className={classes.logo}/>
             </Link>
-            <div className={classes.menu}>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
             <div className={classes.nav}>
                 <ul>
                     <li>
-                        <NavLink to="/">Home</NavLink>
+                        <NavLink to="/" className={({ isActive }) => isActive ? `${classes.icons} ${classes.activeIcon}` : classes.icons}>
+                            <FontAwesomeIcon icon={faHouse} />
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/">Dashboard</NavLink>
+                        <NavLink to="/dashboard" className={({ isActive }) => isActive ? `${classes.icons} ${classes.activeIcon}` : classes.icons}>
+                            <FontAwesomeIcon icon={faCalendar} />
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/">Community</NavLink>
+                        <NavLink to="/community" className={({ isActive }) => isActive ? `${classes.icons} ${classes.activeIcon}` : classes.icons}>
+                            <FontAwesomeIcon icon={faUserGroup} />
+                        </NavLink>
                     </li>
                 </ul>
             </div>
-            <div className={classes.btns}>Logout</div>
+            <img src="" className={classes.avatar}></img>
         </div>
     )
 }
