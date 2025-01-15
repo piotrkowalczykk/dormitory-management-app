@@ -5,6 +5,7 @@
     box-sizing: border-box;
     height: 10vh;
     background-image: url("/background.jpg");
+    width: 100%;
 }
 .logo{
     height: 100%;
@@ -36,12 +37,30 @@
 }
 .nav ul li a{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
+.linkName {
+    position: absolute;
+    top: 7%;
+    display: block;
+    opacity: 0;
+    transform: translateY(10px);
+    font-size: 0.75rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    visibility: hidden;
+}
+
+.nav ul li a:hover .linkName {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
 .icons{
     font-size: 1.5rem;
+    color: #2e2e2e;
 }
 .icons.activeIcon{
     color: white;
@@ -55,4 +74,5 @@
     height: 2.5rem;
     margin-right: 1em;
 }
+
 

@@ -17,16 +17,19 @@ export function Nav(){
                     <li>
                         <NavLink to="/" className={({ isActive }) => isActive ? `${classes.icons} ${classes.activeIcon}` : classes.icons}>
                             <FontAwesomeIcon icon={faHouse} />
+                            <p className={classes.linkName}> Home</p>
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to="/dashboard" className={({ isActive }) => isActive ? `${classes.icons} ${classes.activeIcon}` : classes.icons}>
                             <FontAwesomeIcon icon={faCalendar} />
+                            <p className={classes.linkName}> Dashboard</p>
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to="/community" className={({ isActive }) => isActive ? `${classes.icons} ${classes.activeIcon}` : classes.icons}>
                             <FontAwesomeIcon icon={faUserGroup} />
+                            <p className={classes.linkName}> Community</p>
                         </NavLink>
                     </li>
                 </ul>
