@@ -6,6 +6,8 @@
     height: 10vh;
     background-image: url("/background.jpg");
     width: 100%;
+    position: sticky;
+    top: 0;
 }
 .logo{
     height: 100%;
