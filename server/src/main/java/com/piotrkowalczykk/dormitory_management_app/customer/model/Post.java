@@ -12,15 +12,17 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String description;
     private String content;
     private String image;
     @ManyToOne(cascade = CascadeType.ALL)
     private AuthUser author;
     private LocalDateTime creationDate;
 
-    public Post(Long id, String title, String content, String image, AuthUser author, LocalDateTime creationDate) {
+    public Post(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate) {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.content = content;
         this.image = image;
         this.author = author;
@@ -45,6 +47,14 @@ public class Post {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContent() {

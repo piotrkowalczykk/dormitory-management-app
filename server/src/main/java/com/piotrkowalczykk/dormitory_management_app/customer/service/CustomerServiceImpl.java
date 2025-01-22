@@ -58,6 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
         Post post = new Post();
         post.setAuthor(customer);
         post.setTitle(postRequest.getTitle());
+        post.setDescription(postRequest.getDescription());
         post.setContent(postRequest.getContent());
         post.setImage(postRequest.getImage());
         post.setCreationDate(LocalDateTime.now());
