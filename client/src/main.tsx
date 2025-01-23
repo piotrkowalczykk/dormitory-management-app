@@ -11,12 +11,21 @@ import { ProtectedRoute } from './authentication/Routes'
 import { PublicRoute } from './authentication/Routes'
 import { AuthProvider } from './authentication/AuthProvider'
 import { Dashboard } from './feed/pages/Dashboard/Dashboard'
+import { NewsItem } from './feed/pages/ViewNews/NewsItem'
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/:newsTitle",
+    element: (
+      <ProtectedRoute>
+        <NewsItem />
       </ProtectedRoute>
     ),
   },
