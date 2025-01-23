@@ -1,18 +1,26 @@
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import classes from './NewsItem.module.css'
 import { Nav } from '../../components/Nav/Nav';
+import { Footer } from '../../../authentication/components/Footer/Footer';
 
 export function NewsItem(){
 
-    const { newsTitle } = useParams();
+    const location = useLocation();
+    const {title, image, content, data} = location.state || {};
 
     return (
+        <>
+        <Nav />
         <div className={classes.container}>
-            <Nav />
-            <div className={classes.content}>
+            <div className={classes.innerContainer}>
+                <img className={classes.image} src={image}></img>
+                <h1 className={classes.title}>{title}</h1>
+                <p className={classes.content}>{content}</p>
+                <p className={classes.data}>{data}</p>
             </div>
-            <h1>{newsTitle}</h1>
         </div>
+        <Footer />
+        </>
     )
     
 }

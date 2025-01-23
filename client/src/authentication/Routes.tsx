@@ -23,3 +23,13 @@ export const ProtectedRoute = ({children}) =>
     return children;
 }
 
+export const AdminRoute = ({children}) =>
+{
+    const {userDetails} = useAuth();
+
+    if (!userDetails.roles.some(role => role.name === "ADMIN" || role.name === "CUSTOMER")){
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
+}

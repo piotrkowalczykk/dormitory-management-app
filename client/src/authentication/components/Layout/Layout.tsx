@@ -11,8 +11,8 @@ export function Layout({children}: {children: ReactNode}){
             <div className={classes.main}>
                 {children}
             </div>
+            <Footer />
         </div>
-        <Footer />
         </>
     );
 }

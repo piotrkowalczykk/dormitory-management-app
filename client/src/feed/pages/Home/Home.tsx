@@ -49,7 +49,8 @@ export function Home(){
                             <News
                             key={post.id} // Klucz dla każdego elementu listy
                             title={post.title} // Tytuł posta
-                            description={post.description} // Opis posta
+                            description={post.description}
+                            content={post.content} // Opis posta
                             image={post.image} // URL obrazka
                             data={post.creationDate} // Data posta
                           />
