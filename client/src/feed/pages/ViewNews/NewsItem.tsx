@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import classes from './NewsItem.module.css'
-import { Nav } from '../../components/Nav/Nav';
-import { Footer } from '../../../authentication/components/Footer/Footer';
+import { NavBar } from '../../components/NavBar/NavBar';
+import { Footer } from '../../../components/Footer/Footer';
 
 export function NewsItem(){
 
@@ -10,7 +10,7 @@ export function NewsItem(){
 
     return (
         <>
-        <Nav />
+        <NavBar />
         <div className={classes.container}>
             <div className={classes.innerContainer}>
                 <img className={classes.image} src={image}></img>

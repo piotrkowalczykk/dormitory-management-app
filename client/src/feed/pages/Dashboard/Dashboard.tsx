@@ -1,10 +1,10 @@
 import classes from './Dashboard.module.css'
-import { Nav } from '../../components/Nav/Nav'
+import { NavBar } from '../../components/NavBar/NavBar'
 
 export function Dashboard(){
     return (
         <div className={classes.container}>
-            <Nav />
+            <NavBar />
         </div>
     )
 }

@@ -1,8 +1,10 @@
 import classes from './Home.module.css'
-import { Nav } from '../../components/Nav/Nav'
-import { News } from '../../components/News/News'
-import { Footer } from '../../../authentication/components/Footer/Footer'
+import { NavBar } from '../../components/NavBar/NavBar'
+import { Article } from '../../components/Article/Article'
+import { Footer } from '../../../components/Footer/Footer'
 import { useEffect, useState } from 'react'
+import { Button } from '../../../authentication/components/Button/Button'
+import { Layout } from '../../components/Layout/Layout'
 export function Home(){
 
     const [posts, setPosts] = useState([]);
@@ -37,27 +39,27 @@ export function Home(){
 
     
     return (
+        <Layout>
         <div className={classes.container}>
-            <Nav />
             <div className={classes.main}>
                 <div className={classes.title}>
                     <h1><span style={{color: 'red'}}>.</span>News</h1>
                 </div>
+                <Button type='button'>Add article +</Button>
                 {isLoading ? <p>Loading...</p> : 
                     posts.map(post => 
                         (
-                            <News
-                            key={post.id} // Klucz dla każdego elementu listy
-                            title={post.title} // Tytuł posta
+                            <Article
+                            key={post.id}
+                            title={post.title}
                             description={post.description}
-                            content={post.content} // Opis posta
-                            image={post.image} // URL obrazka
-                            data={post.creationDate} // Data posta
+                            image={post.image}
+                            data={post.creationDate}
                           />
                         ))
                 }
             </div>
-            <Footer />
         </div>
+        </Layout>
     )
 }

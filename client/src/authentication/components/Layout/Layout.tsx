@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import classes from './Layout.module.css';
 import { Header } from '../Header/Header';
-import { Footer } from '../Footer/Footer';
+import { Footer } from '../../../components/Footer/Footer';
 
 export function Layout({children}: {children: ReactNode}){
     return(
