@@ -5,12 +5,9 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 
-export function SideBar(){
-
-    
-
+export function SideBar({isVisible}: {isVisible: boolean}){
     return(
-        <div className={classes.container}>
+        <div className={`${classes.container} ${isVisible ? classes.visible : classes.hidden}`}>
             <div className={classes.userData}>
                 <img className={classes.userAvatar} src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"/>
                 <h1 className={classes.userName}>Piotrek Kowalczyk</h1>

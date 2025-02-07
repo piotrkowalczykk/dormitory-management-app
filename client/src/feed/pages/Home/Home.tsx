@@ -45,7 +45,6 @@ export function Home(){
                 <div className={classes.title}>
                     <h1><span style={{color: 'red'}}>.</span>News</h1>
                 </div>
-                <Button type='button'>Add article +</Button>
                 {isLoading ? <p>Loading...</p> : 
                     posts.map(post => 
                         (

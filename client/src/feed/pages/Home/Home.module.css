@@ -2,9 +2,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 100%;
     height: 90vh;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 .main{
     display: flex;
@@ -12,14 +13,15 @@
     align-items: center;
     max-width: 1200px;
     width: 100%;
+    margin-bottom: 6rem;
 }
 .title{
-    margin-top: 1rem;
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-direction: row;
     font-weight: 500;
     color: #2e2e2e;;
+    margin-top: 2rem;
     font-size: 4rem;
 }
 @media (max-width: 500px) {
