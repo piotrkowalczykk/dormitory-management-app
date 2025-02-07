@@ -2,10 +2,10 @@ package com.piotrkowalczykk.dormitory_management_app.customer.service;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
-import com.piotrkowalczykk.dormitory_management_app.customer.dto.PostRequest;
-import com.piotrkowalczykk.dormitory_management_app.customer.model.Post;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
-import com.piotrkowalczykk.dormitory_management_app.customer.repository.PostRepository;
+import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.StudentRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
@@ -21,14 +21,14 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private final PostRepository postRepository;
+    private final ArticleRepository articleRepository;
     private final StudentRepository studentRepository;
     private final AuthUserRepository authUserRepository;
     private final AcademyRepository academyRepository;
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    public CustomerServiceImpl(PostRepository postRepository, StudentRepository studentRepository, AuthUserRepository authUserRepository, AcademyRepository academyRepository) {
-        this.postRepository = postRepository;
+    public CustomerServiceImpl(ArticleRepository articleRepository, StudentRepository studentRepository, AuthUserRepository authUserRepository, AcademyRepository academyRepository) {
+        this.articleRepository = articleRepository;
         this.studentRepository = studentRepository;
         this.authUserRepository = authUserRepository;
         this.academyRepository = academyRepository;
@@ -49,20 +49,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Post createPost(PostRequest postRequest) {
+    public Article createArticle(ArticleRequest articleRequest) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthUser customer = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("Customer not found"));
 
-        Post post = new Post();
-        post.setAuthor(customer);
-        post.setTitle(postRequest.getTitle());
-        post.setDescription(postRequest.getDescription());
-        post.setContent(postRequest.getContent());
-        post.setImage(postRequest.getImage());
-        post.setCreationDate(LocalDateTime.now());
+        Article article = new Article();
+        article.setAuthor(customer);
+        article.setTitle(articleRequest.getTitle());
+        article.setDescription(articleRequest.getDescription());
+        article.setContent(articleRequest.getContent());
+        article.setImage(articleRequest.getImage());
+        article.setCreationDate(LocalDateTime.now());
 
-        return postRepository.save(post);
+        return articleRepository.save(article);
+    }
+
+    @Override
+    public void deleteArticle(Long postId) {
+        articleRepository.deleteById(postId);
     }
 }

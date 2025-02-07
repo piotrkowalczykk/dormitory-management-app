@@ -1,12 +1,12 @@
 package com.piotrkowalczykk.dormitory_management_app.customer.dto;
 
-public class PostRequest {
+public class ArticleRequest {
     private String title;
     private String description;
     private String content;
     private String image;
 
-    public PostRequest(String title, String description, String content, String image) {
+    public ArticleRequest(String title, String description, String content, String image) {
         this.title = title;
         this.description = description;
         this.content = content;

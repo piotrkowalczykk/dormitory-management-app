@@ -13,7 +13,7 @@ export function Home(){
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await fetch("http://localhost:8080/feed/posts", {
+                const response = await fetch("http://localhost:8080/feed/articles", {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",

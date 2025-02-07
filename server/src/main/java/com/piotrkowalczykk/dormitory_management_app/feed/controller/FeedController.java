@@ -1,12 +1,10 @@
 package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
-import com.piotrkowalczykk.dormitory_management_app.customer.model.Post;
-import com.piotrkowalczykk.dormitory_management_app.customer.repository.PostRepository;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.SelectAcademyRequest;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +31,8 @@ public class FeedController {
        return ResponseEntity.ok(listOfAcademies);
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<List<Post>> getAllPosts() {
-        return ResponseEntity.ok(feedService.getAllPosts());
+    @GetMapping("/articles")
+    public ResponseEntity<List<ArticleResponse>> getAllArticles() {
+        return ResponseEntity.ok(feedService.getAllArticles());
     }
 }

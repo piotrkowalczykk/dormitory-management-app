@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
-public class Post {
+@Table(name = "articles")
+public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +22,7 @@ public class Post {
     private AuthUser author;
     private LocalDateTime creationDate;
 
-    public Post(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate) {
+    public Article(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,7 +32,7 @@ public class Post {
         this.creationDate = creationDate;
     }
 
-    public Post(){
+    public Article(){
 
     }
 
