@@ -2,6 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.feed.service;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleDetailResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
@@ -88,5 +89,17 @@ public class FeedServiceImpl implements FeedService{
                 article.getImage(),
                 article.getCreationDate().toLocalDate()
         )).collect(Collectors.toList());
+    }
+
+    @Override
+    public ArticleDetailResponse getArticle(Long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Article not found"));
+        return new ArticleDetailResponse(
+                article.getId(),
+                article.getTitle(),
+                article.getContent(),
+                article.getImage(),
+                article.getCreationDate().toLocalDate()
+        );
     }
 }

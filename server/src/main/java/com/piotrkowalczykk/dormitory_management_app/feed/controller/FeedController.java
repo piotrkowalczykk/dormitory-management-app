@@ -1,6 +1,7 @@
 package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleDetailResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
@@ -35,4 +36,10 @@ public class FeedController {
     public ResponseEntity<List<ArticleResponse>> getAllArticles() {
         return ResponseEntity.ok(feedService.getAllArticles());
     }
+
+    @GetMapping("/articles/{articleId}")
+    public ResponseEntity<ArticleDetailResponse> getArticle(@PathVariable Long articleId){
+        return ResponseEntity.ok(feedService.getArticle(articleId));
+    }
+
 }
