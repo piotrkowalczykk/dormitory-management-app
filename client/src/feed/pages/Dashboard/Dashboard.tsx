@@ -1,10 +1,12 @@
 import classes from './Dashboard.module.css'
-import { NavBar } from '../../components/NavBar/NavBar'
+import { Layout } from '../../components/Layout/Layout'
 
 export function Dashboard(){
     return (
-        <div className={classes.container}>
-            <NavBar />
-        </div>
+        <Layout>
+            <div className={classes.container}>
+                Soon...
+            </div>
+        </Layout>
     )
 }

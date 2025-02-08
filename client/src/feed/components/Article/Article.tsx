@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { FC } from "react"
 
 interface ArticleProps {
+    id: string;
     title: string;
     description: string;
     data: string;
@@ -17,8 +18,9 @@ const slugify = (text: string) => {
 }
 
 export const Article: FC<ArticleProps> = ({
-    title, description, data, image
+    title, description, data, image, id
 }) => {
+
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -26,7 +28,7 @@ export const Article: FC<ArticleProps> = ({
                 <p className={classes.description}>{description}</p>
                 <div className={classes.innerContainer}>
                 <p className={classes.data}>{data}</p>
-                <Link to={`/${slugify(title)}`}>
+                <Link to={`/${slugify(title)}`} state={{id}}>
                 <button className={classes.btn}>Read more</button>
                 </Link>
                 </div>

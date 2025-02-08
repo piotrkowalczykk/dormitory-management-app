@@ -29,7 +29,6 @@
     }
 }
 
-/* Styl dla danych użytkownika */
 .userData {
     display: flex;
     flex-direction: column;
@@ -64,6 +63,7 @@
     padding: 1rem 5%;
     gap: 5%;
     color: black;
+    width: 100%;
 }
 
 .navigationItem:hover {

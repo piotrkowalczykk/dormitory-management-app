@@ -11,7 +11,8 @@ import { ProtectedRoute } from './authentication/Routes'
 import { PublicRoute } from './authentication/Routes'
 import { AuthProvider } from './authentication/AuthProvider'
 import { Dashboard } from './feed/pages/Dashboard/Dashboard'
-import { NewsItem } from './feed/pages/ViewNews/NewsItem'
+import { ArticleDetail } from './feed/pages/ArticleDetail/ArticleDetail'
+import { ManageArticles } from './feed/pages/ManageArticles/ManageArticles'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,7 +26,15 @@ const router = createBrowserRouter([
     path: "/:newsTitle",
     element: (
       <ProtectedRoute>
-        <NewsItem />
+        <ArticleDetail />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/manage-articles",
+    element: (
+      <ProtectedRoute>
+        <ManageArticles />
       </ProtectedRoute>
     ),
   },

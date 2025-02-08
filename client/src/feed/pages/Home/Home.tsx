@@ -1,17 +1,14 @@
 import classes from './Home.module.css'
-import { NavBar } from '../../components/NavBar/NavBar'
 import { Article } from '../../components/Article/Article'
-import { Footer } from '../../../components/Footer/Footer'
 import { useEffect, useState } from 'react'
-import { Button } from '../../../authentication/components/Button/Button'
 import { Layout } from '../../components/Layout/Layout'
 export function Home(){
 
-    const [posts, setPosts] = useState([]);
+    const [articles, setArticles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchArticles = async () => {
             try {
                 const response = await fetch("http://localhost:8080/feed/articles", {
                         method: "GET",
@@ -25,7 +22,7 @@ export function Home(){
                     console.log(response.status);
                 }
                 const data = await response.json();
-                setPosts(data);
+                setArticles(data);
                 console.log(data);
             } catch (error){
                 console.log(error);
@@ -34,7 +31,7 @@ export function Home(){
             }
         };
 
-        fetchPosts();
+        fetchArticles();
     }, []);
 
     
@@ -46,14 +43,15 @@ export function Home(){
                     <h1><span style={{color: 'red'}}>.</span>News</h1>
                 </div>
                 {isLoading ? <p>Loading...</p> : 
-                    posts.map(post => 
+                    articles.map(article => 
                         (
                             <Article
-                            key={post.id}
-                            title={post.title}
-                            description={post.description}
-                            image={post.image}
-                            data={post.creationDate}
+                            key={article.id}
+                            id = {article.id}
+                            title={article.title}
+                            description={article.description}
+                            image={article.image}
+                            data={article.creationDate}
                           />
                         ))
                 }
