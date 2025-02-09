@@ -1,12 +1,14 @@
 package com.piotrkowalczykk.dormitory_management_app.customer.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ArticleRequest {
     private String title;
     private String description;
     private String content;
-    private String image;
+    private MultipartFile image;
 
-    public ArticleRequest(String title, String description, String content, String image) {
+    public ArticleRequest(String title, String description, String content, MultipartFile image) {
         this.title = title;
         this.description = description;
         this.content = content;
@@ -37,11 +39,11 @@ public class ArticleRequest {
         this.content = content;
     }
 
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 }

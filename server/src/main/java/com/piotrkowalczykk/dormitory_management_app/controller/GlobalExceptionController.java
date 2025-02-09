@@ -4,6 +4,7 @@ import com.piotrkowalczykk.dormitory_management_app.feed.exception.AcademyNotFou
 import com.piotrkowalczykk.dormitory_management_app.security.dto.ResponseGlobalException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.CustomAuthenticationException;
 import com.piotrkowalczykk.dormitory_management_app.security.exception.EmailSendingException;
+import com.piotrkowalczykk.dormitory_management_app.utils.file.exception.FileStorageException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -93,4 +95,11 @@ public class GlobalExceptionController{
         ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDate.now());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<ResponseGlobalException> handleFileStorageException(FileStorageException exception){
+        String errorMessage = exception.getMessage();
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDate.now());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

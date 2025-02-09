@@ -39,7 +39,8 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/feed/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers("/customer/**").hasAuthority("ROLE_CUSTOMER")
+                .requestMatchers("/feed/**").hasAnyAuthority("ROLE_USER", "ROLE_CUSTOMER", "ROLE_ADMIN")
                 .anyRequest().authenticated());
         httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.addFilterBefore(jwtAuthFilter(jsonWebToken, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);

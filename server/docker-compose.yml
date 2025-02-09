@@ -41,6 +41,7 @@ services:
       - db
     volumes:
       - ./src/main:/app/src/main
+      - ./uploads:/uploads
     restart: always
 
   smtp:

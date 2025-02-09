@@ -26,15 +26,20 @@ public class CustomerController {
         return ResponseEntity.ok(listOfStudents);
     }
 
-    @PostMapping("/create-post")
-    public ResponseEntity<Article> createPost(@RequestBody ArticleRequest addArticleRequest){
+    @PostMapping("/create-article")
+    public ResponseEntity<Article> createArticle(@ModelAttribute ArticleRequest addArticleRequest){
         Article article = customerService.createArticle(addArticleRequest);
         return ResponseEntity.ok(article);
     }
 
-    @DeleteMapping("/delete-post/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable Long postId){
-        customerService.deleteArticle(postId);
-        return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
+    @DeleteMapping("/delete-article/{articleId}")
+    public ResponseEntity<String> deleteArticle(@PathVariable Long articleId){
+        customerService.deleteArticle(articleId);
+        return new ResponseEntity<>("Article deleted successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/siema")
+    public ResponseEntity<String> hello(){
+        return ResponseEntity.ok("siema");
     }
 }
