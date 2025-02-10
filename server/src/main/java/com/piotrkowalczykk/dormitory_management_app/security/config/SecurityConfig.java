@@ -37,7 +37,7 @@ public class SecurityConfig {
         httpSecurity.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(request -> request
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**", "/api/uploads/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/customer/**").hasAuthority("ROLE_CUSTOMER")
                 .requestMatchers("/feed/**").hasAnyAuthority("ROLE_USER", "ROLE_CUSTOMER", "ROLE_ADMIN")

@@ -38,6 +38,12 @@ public class CustomerController {
         return new ResponseEntity<>("Article deleted successfully", HttpStatus.OK);
     }
 
+    @PutMapping("/edit-article/{articleId}")
+    public ResponseEntity<Article> editArticle(@PathVariable Long articleId, @ModelAttribute ArticleRequest articleRequest){
+       Article article = customerService.editArticle(articleId, articleRequest);
+       return ResponseEntity.ok(article);
+    }
+
     @GetMapping("/siema")
     public ResponseEntity<String> hello(){
         return ResponseEntity.ok("siema");

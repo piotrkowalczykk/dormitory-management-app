@@ -37,6 +37,7 @@ public class FeedController {
         return ResponseEntity.ok(feedService.getAllArticles());
     }
 
+
     @GetMapping("/articles/{articleId}")
     public ResponseEntity<ArticleDetailResponse> getArticle(@PathVariable Long articleId){
         return ResponseEntity.ok(feedService.getArticle(articleId));

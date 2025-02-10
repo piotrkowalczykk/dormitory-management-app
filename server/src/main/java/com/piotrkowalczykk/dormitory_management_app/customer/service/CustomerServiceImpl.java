@@ -75,4 +75,19 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteArticle(Long postId) {
         articleRepository.deleteById(postId);
     }
+
+    @Override
+    public Article editArticle(Long articleId, ArticleRequest articleRequest) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(()-> new IllegalArgumentException("Article not found"));
+
+        String imagePath = fileService.saveFile(articleRequest.getImage(), "articles");
+
+        article.setTitle(articleRequest.getTitle());
+        article.setContent(articleRequest.getContent());
+        article.setDescription(articleRequest.getDescription());
+        article.setImage(imagePath);
+
+        return articleRepository.save(article);
+    }
 }
