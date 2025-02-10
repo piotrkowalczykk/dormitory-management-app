@@ -9,6 +9,6 @@
 
 @media (max-width: 500px) {
     .innerContainer{
-        height: 90vh;
+        min-height: 90vh;
     }
 }

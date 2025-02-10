@@ -4,11 +4,14 @@
     align-items: center;
     justify-content: space-evenly;
     width: 100%;
-    height: 90vh;
     overflow: hidden;
     overflow-y: scroll;
 }
 .innerContainer1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: white;
     width: 45%;
     height: 80vh;
@@ -16,11 +19,100 @@
     -moz-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
     box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
 }
+.inputs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 50%;
+    padding: 1rem;
+    gap: 1rem
+}
+.titleAndDescription{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.input{
+    width: 100%;
+    resize: none;
+}
+.inputLabel{
+    margin-top: 1rem;
+}
+.btn{
+    background-color: green;
+    color: white;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+.btn:hover{
+    color: yellow;
+}
 .innerContainer2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: white;
     width: 45%;
     height: 80vh;
     -webkit-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
     -moz-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
     box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+}
+.title{
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+table{
+    border: 1px solid black;
+    border-spacing: 0;
+    width: 90%;
+}
+td, th{
+    padding: 1rem;
+    font-size: 0.75rem;
+    text-align: center;
+}
+th{
+    background-color: green;
+    color: white;
+}
+
+@media (max-width: 1000px){
+    td, th{
+        font-size: 0.5rem;
+        padding: 0.75rem;
+    }
+}
+@media (max-width: 750px){
+    td, th{
+        font-size: 0.4rem;
+        padding: 0.3rem;
+    }
+}
+@media (max-width: 500px){
+    .container{
+        flex-direction: column;
+    }
+    .innerContainer1{
+        width: 90%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .innerContainer2{
+        width: 90%;
+        margin-bottom: 1rem;
+    }
+    td, th{
+        font-size: 0.5rem;
+        padding: 0.75rem;
+    }
 }
