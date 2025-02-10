@@ -58,7 +58,10 @@ public class CustomerServiceImpl implements CustomerService {
         AuthUser customer = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("Customer not found"));
 
-        String imagePath = fileService.saveFile(articleRequest.getImage(), "articles");
+        String imagePath = null;
+        if(articleRequest.getImage() != null && !articleRequest.getImage().isEmpty()){
+            imagePath = fileService.saveFile(articleRequest.getImage(), "articles");
+        }
 
         Article article = new Article();
         article.setAuthor(customer);
@@ -72,8 +75,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteArticle(Long postId) {
-        articleRepository.deleteById(postId);
+    public void deleteArticle(Long articleId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(()-> new IllegalArgumentException("Article not found"));
+
+        if(authentication.getName().equals(article.getAuthor().getEmail())){
+            articleRepository.delete(article);
+            fileService.deleteImage(article.getImage());
+        }
     }
 
     @Override
@@ -81,12 +92,22 @@ public class CustomerServiceImpl implements CustomerService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(()-> new IllegalArgumentException("Article not found"));
 
-        String imagePath = fileService.saveFile(articleRequest.getImage(), "articles");
+        if(articleRequest.getImage() != null && !articleRequest.getImage().isEmpty()){
+            if(article.getImage() != null && !article.getImage().isEmpty())
+                fileService.deleteImage(article.getImage());
+
+            String imagePath = fileService.saveFile(articleRequest.getImage(), "articles");
+            article.setImage(imagePath);
+        } else if (articleRequest.getImage() != null && articleRequest.getImage().isEmpty()){
+            if(article.getImage() != null  && !article.getImage().isEmpty()) {
+                fileService.deleteImage(article.getImage());
+                article.setImage("");
+            }
+        }
 
         article.setTitle(articleRequest.getTitle());
         article.setContent(articleRequest.getContent());
         article.setDescription(articleRequest.getDescription());
-        article.setImage(imagePath);
 
         return articleRepository.save(article);
     }

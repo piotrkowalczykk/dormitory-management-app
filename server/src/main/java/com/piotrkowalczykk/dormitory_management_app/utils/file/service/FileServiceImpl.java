@@ -22,6 +22,7 @@ public class FileServiceImpl implements FileService{
 
     private final String BASE_UPLOAD_DIR = "/uploads";
     private final String BASE_URL = "http://localhost:8080";
+
     @Override
     public String saveFile(MultipartFile file, String directoryName){
         try {
@@ -51,5 +52,17 @@ public class FileServiceImpl implements FileService{
         } catch (MalformedURLException e){
             throw new RuntimeException("Invalid file path");
         }
+    }
+
+    @Override
+    public boolean deleteImage(String fileName) {
+        try{
+            Path filePath = Paths.get(BASE_UPLOAD_DIR).resolve(fileName);
+            boolean isDeleted = Files.deleteIfExists(filePath);
+            return isDeleted;
+        } catch (IOException e){
+            throw new FileStorageException("Error deleting file: " + e.getMessage());
+        }
+
     }
 }

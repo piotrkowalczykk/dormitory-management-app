@@ -18,7 +18,7 @@ public class Article {
     private String content;
     @Column(columnDefinition = "TEXT")
     private String image;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private AuthUser author;
     private LocalDateTime creationDate;
 

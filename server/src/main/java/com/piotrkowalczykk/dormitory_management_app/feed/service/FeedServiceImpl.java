@@ -76,12 +76,15 @@ public class FeedServiceImpl implements FeedService{
     public List<ArticleResponse> getAllArticles() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info(authentication.toString());
         AuthUser user = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("User not found"));
 
-        List<Article> articles = articleRepository.findAllByAuthorId(user.getAcademy().getId())
+        List<Article> articles = articleRepository.findAllByAuthorEmail(user.getAcademy().getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Articles not found"));
 
+        logger.info(user.getAcademy().getId().toString());
+        logger.info(user.getAcademy().toString());
         return articles.stream().map(article -> new ArticleResponse(
                 article.getId(),
                 article.getTitle(),
