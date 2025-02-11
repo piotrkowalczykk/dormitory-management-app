@@ -7,7 +7,7 @@ import { Login } from './authentication/pages/Login/Login'
 import { Register } from './authentication/pages/Register/Register'
 import { ResetPassword } from './authentication/pages/ResetPassword/ResetPassword'
 import { EmailVerification } from './authentication/pages/EmailVerification/EmailVerification'
-import { ProtectedRoute } from './authentication/Routes'
+import { AdminRoute, ProtectedRoute } from './authentication/Routes'
 import { PublicRoute } from './authentication/Routes'
 import { AuthProvider } from './authentication/AuthProvider'
 import { Dashboard } from './feed/pages/Dashboard/Dashboard'
@@ -34,7 +34,9 @@ const router = createBrowserRouter([
     path: "/manage-articles",
     element: (
       <ProtectedRoute>
-        <ManageArticles />
+        <AdminRoute>
+          <ManageArticles />
+        </AdminRoute>
       </ProtectedRoute>
     ),
   },

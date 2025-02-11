@@ -69,13 +69,17 @@
 }
 @media (max-width: 500px) {
     .container {
+        display: flex;
         flex-direction: column;
+        align-items: center;
     }
     .content {
         width: 100%;
         order: 1;
     }
     .image {
+        display: flex;
+        justify-content: center;
         order: -1;
         width: 100%;
         padding: 0px;

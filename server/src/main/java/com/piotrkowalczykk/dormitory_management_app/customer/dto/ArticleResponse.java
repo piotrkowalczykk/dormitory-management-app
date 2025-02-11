@@ -8,13 +8,15 @@ public class ArticleResponse {
     private String description;
     private String image;
     private LocalDate creationDate;
+    private String content;
 
-    public ArticleResponse(Long id, String title, String description, String image, LocalDate creationDate) {
+    public ArticleResponse(Long id, String title, String description, String image, LocalDate creationDate, String content) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
         this.creationDate = creationDate;
+        this.content = content;
     }
 
     public Long getId() {
@@ -55,5 +57,13 @@ public class ArticleResponse {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

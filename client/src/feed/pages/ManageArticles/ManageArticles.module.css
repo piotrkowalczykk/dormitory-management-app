@@ -8,6 +8,7 @@
     overflow-y: scroll;
 }
 .innerContainer1{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,6 +19,20 @@
     -webkit-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
     -moz-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
     box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+}
+.btnNew{
+    background-color: green;
+    font-size: 2rem;
+    color: white;
+    width: 3rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
+.btnNew:hover{
+    color: yellow;
 }
 .inputs{
     display: flex;
@@ -46,7 +61,7 @@
     margin-top: 1rem;
 }
 .btn{
-    background-color: green;
+    background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(255,0,137,1) 0%, rgba(255,73,73,1) 59%);
     color: white;
     border-radius: 1rem;
     margin-top: 2rem;

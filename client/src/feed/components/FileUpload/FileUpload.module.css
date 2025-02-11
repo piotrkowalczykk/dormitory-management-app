@@ -40,3 +40,14 @@
 .uploadButton:hover {
     color: yellow;
 }
+
+.removeButton{
+    background-color: red;
+    color: white;
+    width: 2rem;
+    aspect-ratio: 1/1;
+    position: absolute;
+}
+.removeButton:hover{
+    background-color: rgb(204, 25, 25);
+}

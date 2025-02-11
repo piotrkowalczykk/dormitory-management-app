@@ -25,7 +25,7 @@ export function ArticleDetail(){
         });
         const data = await response.json();
         setArticle({
-            image: data.image,
+            image: data.image ? `http://localhost:8080/api/uploads/${data.image}` : '',
             title: data.title,
             content: data.content,
             date: data.creationDate,
@@ -43,7 +43,7 @@ export function ArticleDetail(){
         <Layout>
         <div className={classes.container}>
             <div className={classes.innerContainer}>
-                <img className={classes.image} src={article.image}></img>
+                {article.image && <img className={classes.image} src={article.image} />}
                 <h1 className={classes.title}>{article.title}</h1>
                 <p className={classes.content}>{article.content}</p>
                 <p className={classes.data}>{article.date}</p>
