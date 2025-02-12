@@ -1,13 +1,13 @@
 package com.piotrkowalczykk.dormitory_management_app.security.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ResponseGlobalException {
     private Integer statusCode;
     private String message;
-    private LocalDate timestamp;
+    private LocalDateTime timestamp;
 
-    public ResponseGlobalException(Integer statusCode, String message, LocalDate timestamp) {
+    public ResponseGlobalException(Integer statusCode, String message, LocalDateTime timestamp) {
         this.statusCode = statusCode;
         this.message = message;
         this.timestamp = timestamp;
@@ -29,11 +29,11 @@ public class ResponseGlobalException {
         this.message = message;
     }
 
-    public LocalDate getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

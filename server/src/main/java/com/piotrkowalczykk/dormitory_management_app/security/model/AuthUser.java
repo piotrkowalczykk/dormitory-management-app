@@ -1,6 +1,8 @@
 package com.piotrkowalczykk.dormitory_management_app.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
+import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import jakarta.persistence.*;
 
 import java.lang.reflect.Type;
@@ -35,11 +37,14 @@ public class AuthUser {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
+    private List<Post> posts;
 
     public AuthUser(long id, String email, String password, String passwordResetCode,
                     LocalDateTime passwordResetCodeExpiryDate, String firstName, String lastName,
                     Gender gender, LocalDate dateOfBirth, LocalDate createdAt, boolean emailVerified,
-                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, Academy academy, List<Role> roles) {
+                    String emailVerificationCode, LocalDateTime emailVerificationCodeExpiryDate, Academy academy, List<Role> roles, List<Post> posts) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -55,6 +60,7 @@ public class AuthUser {
         this.emailVerificationCodeExpiryDate = emailVerificationCodeExpiryDate;
         this.academy = academy;
         this.roles = roles;
+        this.posts = posts;
     }
 
     public AuthUser(){
@@ -179,5 +185,13 @@ public class AuthUser {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

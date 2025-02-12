@@ -2,7 +2,9 @@ package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.PostRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,8 @@ public class FeedController {
     }
 
     @GetMapping("/me")
-    public UserDetailsResponse getUserDetails(@RequestHeader("Authorization") String authHeader){
-        return feedService.getUserDetails(authHeader);
+    public UserDetailsResponse getUserDetails(){
+        return feedService.getUserDetails();
     }
 
     @GetMapping("/academies")
@@ -39,6 +41,24 @@ public class FeedController {
     @GetMapping("/articles/{articleId}")
     public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId){
         return ResponseEntity.ok(feedService.getArticle(articleId));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<Post>> getAllPosts(){
+        List<Post> listOfPosts = feedService.getAllPosts();
+        return ResponseEntity.ok(listOfPosts);
+    }
+
+    @PostMapping("/posts")
+    public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest){
+        Post post = feedService.createPost(postRequest);
+        return ResponseEntity.ok(post);
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<Post> editPost(@RequestBody PostRequest postRequest, @PathVariable Long postId){
+        Post post = feedService.editPost(postRequest, postId);
+        return ResponseEntity.ok(post);
     }
 
 }

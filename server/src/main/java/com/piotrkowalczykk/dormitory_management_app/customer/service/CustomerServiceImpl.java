@@ -12,6 +12,7 @@ import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUser
 import com.piotrkowalczykk.dormitory_management_app.utils.file.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Article createArticle(ArticleRequest articleRequest) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthUser customer = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("Customer not found"));
@@ -76,21 +76,27 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteArticle(Long articleId) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(()-> new IllegalArgumentException("Article not found"));
 
-        if(authentication.getName().equals(article.getAuthor().getEmail())){
-            articleRepository.delete(article);
-            fileService.deleteImage(article.getImage());
+        if(!authentication.getName().equals(article.getAuthor().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this article");
         }
+
+        articleRepository.delete(article);
+        fileService.deleteImage(article.getImage());
     }
 
     @Override
     public Article editArticle(Long articleId, ArticleRequest articleRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(()-> new IllegalArgumentException("Article not found"));
+
+        if(!authentication.getName().equals(article.getAuthor().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this article");
+        }
 
         if(articleRequest.getImage() != null && !articleRequest.getImage().isEmpty()){
             if(article.getImage() != null && !article.getImage().isEmpty())
@@ -108,7 +114,6 @@ public class CustomerServiceImpl implements CustomerService {
         article.setTitle(articleRequest.getTitle());
         article.setContent(articleRequest.getContent());
         article.setDescription(articleRequest.getDescription());
-
         return articleRepository.save(article);
     }
 }

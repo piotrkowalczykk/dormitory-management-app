@@ -1,5 +1,6 @@
 package com.piotrkowalczykk.dormitory_management_app.feed.dto;
 
+import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import com.piotrkowalczykk.dormitory_management_app.security.model.Gender;
 import com.piotrkowalczykk.dormitory_management_app.security.model.Role;
 
@@ -14,8 +15,9 @@ public class UserDetailsResponse {
     private LocalDate dateOfBirth;
     private String academyName;
     private List<Role> roles;
+    private List<Post> posts;
 
-    public UserDetailsResponse(String email, String firstName, String lastName, Gender gender, LocalDate dateOfBirth, String academyName, List<Role> roles) {
+    public UserDetailsResponse(String email, String firstName, String lastName, Gender gender, LocalDate dateOfBirth, String academyName, List<Role> roles, List<Post> posts) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,6 +25,7 @@ public class UserDetailsResponse {
         this.dateOfBirth = dateOfBirth;
         this.academyName = academyName;
         this.roles = roles;
+        this.posts = posts;
     }
 
     public String getEmail() {
@@ -79,5 +82,13 @@ public class UserDetailsResponse {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

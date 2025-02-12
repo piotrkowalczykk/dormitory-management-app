@@ -13,7 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDate;
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +52,7 @@ public class GlobalExceptionController{
         } else {
             errorMessage = exception.getMessage();
         }
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -64,42 +64,43 @@ public class GlobalExceptionController{
         } else {
             errorMessage = "data integrity violation";
         }
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EmailSendingException.class)
     public ResponseEntity<ResponseGlobalException> handleEmailSendingException(EmailSendingException exception){
         String errorMessage = exception.getMessage();
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseGlobalException> handleIllegalArgumentException(IllegalArgumentException exception){
         String errorMessage = exception.getMessage();
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.BAD_REQUEST.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CustomAuthenticationException.class)
     public ResponseEntity<ResponseGlobalException> handleCustomAuthenticationException(CustomAuthenticationException exception){
         String errorMessage = exception.getMessage();
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(AcademyNotFoundException.class)
     public ResponseEntity<ResponseGlobalException> handleAcademyNotSelectedException(AcademyNotFoundException exception){
         String errorMessage = exception.getMessage();
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.UNAUTHORIZED.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(FileStorageException.class)
     public ResponseEntity<ResponseGlobalException> handleFileStorageException(FileStorageException exception){
         String errorMessage = exception.getMessage();
-        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDate.now());
+        ResponseGlobalException response = new ResponseGlobalException(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorMessage, LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
 }
