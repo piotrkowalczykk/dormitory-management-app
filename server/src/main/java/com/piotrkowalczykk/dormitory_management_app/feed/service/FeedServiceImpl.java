@@ -146,4 +146,34 @@ public class FeedServiceImpl implements FeedService{
         post.setLastModifiedDate(LocalDateTime.now());
         return postRepository.save(post);
     }
+
+    @Override
+    public void deletePost(Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new IllegalArgumentException("Post not found"));
+
+        if(!authentication.getName().equals(post.getAuthor().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this post");
+        }
+
+        postRepository.delete(post);
+    }
+
+    @Override
+    public Post likePost(Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new IllegalArgumentException("Post not found"));
+        AuthUser user = authUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+
+        if(post.getLikes().contains(user)){
+            post.getLikes().remove(user);
+        } else {
+            post.getLikes().add(user);
+        }
+
+        return postRepository.save(post);
+    }
 }

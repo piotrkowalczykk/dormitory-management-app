@@ -6,6 +6,7 @@ import com.piotrkowalczykk.dormitory_management_app.feed.dto.PostRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +59,18 @@ public class FeedController {
     @PutMapping("/posts/{postId}")
     public ResponseEntity<Post> editPost(@RequestBody PostRequest postRequest, @PathVariable Long postId){
         Post post = feedService.editPost(postRequest, postId);
+        return ResponseEntity.ok(post);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable Long postId){
+        feedService.deletePost(postId);
+        return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("/posts/{postId}/like")
+    public ResponseEntity<Post> likePost(@PathVariable Long postId){
+        Post post = feedService.likePost(postId);
         return ResponseEntity.ok(post);
     }
 

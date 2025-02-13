@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -22,6 +23,12 @@ public class Post {
     @CreationTimestamp
     private LocalDateTime creationDate;
     private LocalDateTime lastModifiedDate;
+    @ManyToMany()
+    @JoinTable(name = "posts_likes",
+                joinColumns = @JoinColumn(name = "post_id"),
+                inverseJoinColumns = @JoinColumn(name = "user_id"))
+
+    private Set<AuthUser> likes;
 
     public Post(String content, String image, AuthUser author) {
         this.content = content;
@@ -79,5 +86,13 @@ public class Post {
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Set<AuthUser> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<AuthUser> likes) {
+        this.likes = likes;
     }
 }

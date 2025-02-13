@@ -16,4 +16,6 @@ public interface FeedService {
     public List<Post> getAllPosts();
     public Post createPost(PostRequest postRequest);
     public Post editPost(PostRequest postRequest, Long postId);
+    public void deletePost(Long postId);
+    public Post likePost(Long postId);
 }
