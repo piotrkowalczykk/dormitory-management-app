@@ -13,6 +13,7 @@ import { AuthProvider } from './authentication/AuthProvider'
 import { Dashboard } from './feed/pages/Dashboard/Dashboard'
 import { ArticleDetail } from './feed/pages/ArticleDetail/ArticleDetail'
 import { ManageArticles } from './feed/pages/ManageArticles/ManageArticles'
+import { Community } from './feed/pages/Community/Community'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
     path: "/community",
     element: (
       <ProtectedRoute>
-        <Dashboard />
+        <Community />
       </ProtectedRoute>
     ),
   },

@@ -1,0 +1,85 @@
+.container{
+    max-width: 600px;
+    margin-top: 3rem;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+    box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+    background-color: white;
+}
+.user{
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 0.5rem;
+    gap: 1rem;
+}
+.userData{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 100%;
+}
+.userAvatar{
+    height: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+.userName{
+    font-size: 1rem;
+    font-weight: 600;
+    color: black;
+}
+.data{
+    font-size: 0.75rem;
+    color: black;
+}
+.userBtns{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    color: black;
+}
+.editIcon:hover, .deleteIcon:hover{
+    color: rgba(255,0,137,1);
+}
+.content{
+    padding: 1rem;
+}
+.stats{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.25rem;
+    border-bottom: 1px solid rgb(247, 244, 244);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.stats .likes, .comments{
+    width: 30%;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+.btns{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 0.25rem;
+}
+.btns button{
+    width: 30%;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+.btns button:hover{
+    background-color: rgb(247, 244, 244);
+}
