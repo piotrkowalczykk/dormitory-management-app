@@ -5,9 +5,12 @@ import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepo
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.CommentRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.PostRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.model.Comment;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
+import com.piotrkowalczykk.dormitory_management_app.feed.repository.CommentRepository;
 import com.piotrkowalczykk.dormitory_management_app.feed.repository.PostRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FeedServiceImpl implements FeedService{
+    private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final JsonWebToken jsonWebToken;
     private final ArticleRepository articleRepository;
@@ -32,7 +36,8 @@ public class FeedServiceImpl implements FeedService{
     private final AuthUserRepository authUserRepository;
     private static final Logger logger = LoggerFactory.getLogger(FeedServiceImpl.class);
 
-    public FeedServiceImpl(PostRepository postRepository, AcademyRepository academyRepository, AuthUserRepository authUserRepository, JsonWebToken jsonWebToken, ArticleRepository articleRepository) {
+    public FeedServiceImpl(CommentRepository commentRepository, PostRepository postRepository, AcademyRepository academyRepository, AuthUserRepository authUserRepository, JsonWebToken jsonWebToken, ArticleRepository articleRepository) {
+        this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.academyRepository = academyRepository;
         this.authUserRepository = authUserRepository;
@@ -168,6 +173,10 @@ public class FeedServiceImpl implements FeedService{
         AuthUser user = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("User not found"));
 
+        if(!user.getAcademy().equals(post.getAuthor().getAcademy())){
+            throw new AccessDeniedException("This post was created by a user from a different academy.");
+        }
+
         if(post.getLikes().contains(user)){
             post.getLikes().remove(user);
         } else {
@@ -175,5 +184,62 @@ public class FeedServiceImpl implements FeedService{
         }
 
         return postRepository.save(post);
+    }
+
+    @Override
+    public Comment addComment(Long postId, CommentRequest commentRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new IllegalArgumentException("Post not found"));
+        AuthUser user = authUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+
+        Comment comment = new Comment(commentRequest.getContent(), post, user);
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    public List<Comment> getComments(Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new IllegalArgumentException("Post not found"));
+        AuthUser user = authUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+
+        if(!user.getAcademy().equals(post.getAuthor().getAcademy())){
+            throw new AccessDeniedException("This post was created by a user from a different academy.");
+        }
+        return post.getComments();
+    }
+
+    @Override
+    public Comment editComment(Long commentId, CommentRequest commentRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(()-> new IllegalArgumentException("Comment not found"));
+        AuthUser user = authUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+
+        if(!comment.getAuthor().equals(user)){
+            throw new AccessDeniedException("You are not the owner of this comment");
+        }
+
+        comment.setContent(commentRequest.getContent());
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+        AuthUser user = authUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (!comment.getAuthor().equals(user)) {
+            throw new AccessDeniedException("You are not the owner of this comment");
+        }
+
+        commentRepository.delete(comment);
     }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,6 +30,9 @@ public class Post {
                 inverseJoinColumns = @JoinColumn(name = "user_id"))
 
     private Set<AuthUser> likes;
+
+    @OneToMany( mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     public Post(String content, String image, AuthUser author) {
         this.content = content;
@@ -94,5 +98,13 @@ public class Post {
 
     public void setLikes(Set<AuthUser> likes) {
         this.likes = likes;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

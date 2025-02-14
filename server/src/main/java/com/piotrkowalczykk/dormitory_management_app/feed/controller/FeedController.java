@@ -2,8 +2,10 @@ package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.CommentRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.PostRequest;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.model.Comment;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
 import org.springframework.http.HttpStatus;
@@ -72,6 +74,30 @@ public class FeedController {
     public ResponseEntity<Post> likePost(@PathVariable Long postId){
         Post post = feedService.likePost(postId);
         return ResponseEntity.ok(post);
+    }
+
+    @PostMapping("/posts/{postId}/comments")
+    public ResponseEntity<Comment> addComment(@PathVariable Long postId, @RequestBody CommentRequest commentRequest){
+        Comment comment = feedService.addComment(postId, commentRequest);
+        return ResponseEntity.ok(comment);
+    }
+
+    @GetMapping("/posts/{postId}/comments")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable Long postId){
+        List<Comment> listOfComments = feedService.getComments(postId);
+        return ResponseEntity.ok(listOfComments);
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<Comment> editComment(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest){
+        Comment comment = feedService.editComment(commentId, commentRequest);
+        return ResponseEntity.ok(comment);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId){
+        feedService.deleteComment(commentId);
+        return ResponseEntity.ok("Comment deleted successfully");
     }
 
 }
