@@ -1,0 +1,56 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    max-height: 500px;
+    max-width: 500px;
+    width: 100%;
+    background: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    position: relative;
+}
+
+.listOfComments{
+    height: 90%;
+    max-height: 400px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.input{
+    width: 80%;
+    border: 3px solid rgb(247, 244, 244);
+    border-radius: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.input:focus{
+    border-color: #00ff33;
+    outline: none;
+}
+
+.send{
+    margin-left: 1rem;
+}
+.send:hover{
+    color: green;
+}

@@ -53,7 +53,10 @@
     color: rgba(255,0,137,1);
 }
 .content{
-    padding: 1rem;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
 }
 .stats{
     display: flex;

@@ -1,0 +1,56 @@
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 0.5rem;
+    border-bottom: 3px solid rgb(247, 244, 244);
+}
+.userData{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+.userDataContainer{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.userAvatar{
+    height: 2rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+.userName{
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: black;
+}
+.data{
+    font-size: 0.5rem;
+    color: black;
+}
+.userBtns{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: black;
+}
+.editIcon:hover, .deleteIcon:hover{
+    color: rgba(255,0,137,1);
+}
+.content{
+    padding-top: 0.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    width: 100%;
+    color: black;
+}
+.hidden{
+    display: none;
+}
