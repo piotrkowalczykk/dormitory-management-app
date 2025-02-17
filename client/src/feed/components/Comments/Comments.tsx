@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
-export function Comments({ closeModal, postId }) {
+export function Comments({ closeModal, postId, onCommentChange }) {
 
     const [comments, setComments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +34,10 @@ export function Comments({ closeModal, postId }) {
         fetchComments();
     }, []);
 
+    useEffect(()=>{
+        onCommentChange(comments.length)
+    }, [comments, onCommentChange]);
+
     const handleAddComment = async () => {
         try {
             const response = await fetch(`http://localhost:8080/feed/posts/${postId}/comments`, {
@@ -57,8 +61,17 @@ export function Comments({ closeModal, postId }) {
             console.log(error);
         }
     };
-    
 
+    const handleDeleteComment = (commentId) => {
+        setComments(comments.filter(comment => comment.id !== commentId));
+    }
+
+    const handleEditComment = (commentId, editedContent) => {
+        setComments(prevComments => prevComments.map(comment =>
+            comment.id === commentId ? { ...comment, content: editedContent } : comment
+        ));
+    };
+    
     return (
         <div className={classes.overlay} onClick={closeModal}>
             <div className={classes.container} onClick={(e) => e.stopPropagation()}>
@@ -74,10 +87,13 @@ export function Comments({ closeModal, postId }) {
                         comments.map(comment => (
                             <SingleComment
                                 key={comment.id}
+                                commentId={comment.id}
                                 authorEmail={comment.author.email} 
-                                name={comment.author.firstName + comment.author.lastName}
+                                name={comment.author.firstName + " " + comment.author.lastName}
                                 date={comment.creationDate}
                                 content={comment.content}
+                                onDelete={handleDeleteComment}
+                                onEdit={handleEditComment}
                             />
                         ))
                     }

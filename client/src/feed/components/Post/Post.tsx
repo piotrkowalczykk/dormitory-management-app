@@ -7,14 +7,14 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Comments } from '../Comments/Comments';
 import { useAuth } from '../../../authentication/AuthProvider';
-export function Post({postId, content, image, name, date, likes, comments}){
+export function Post({postId, content, image, name, date, likes, comments, onCommentChange}){
 
     const [isCommentOpen, setIsCommentOpen] = useState(false);
+    const [commentsCounter, setCommentsCounter] = useState(comments.length);
     
     const handleComment = () => {
         setIsCommentOpen(true);
     }
-
 
     const {userDetails} = useAuth();
 
@@ -38,14 +38,14 @@ export function Post({postId, content, image, name, date, likes, comments}){
             <img className={classes.image} src={image} />
             <div className={classes.stats}>
                 <button className={classes.likes}>👍 {likes.length}</button>
-                <button className={classes.comments} onClick={handleComment}>💬 {comments.length}</button>
+                <button className={classes.comments} onClick={handleComment}>💬 {commentsCounter}</button>
             </div>
             <div className={classes.btns}>
                 <button className={classes.like}><FontAwesomeIcon icon={faThumbsUp} /> I like it!</button>
-                <button className={classes.comment}><FontAwesomeIcon icon={faComment} /> Comment</button>
+                <button className={classes.comment} onClick={handleComment}><FontAwesomeIcon icon={faComment} /> Comment</button>
             </div>
         </div>
-        {isCommentOpen && <Comments closeModal={() => setIsCommentOpen(false)} postId={postId} />}
+        {isCommentOpen && <Comments closeModal={() => setIsCommentOpen(false)} postId={postId} onCommentChange={setCommentsCounter}/>}
         </>
     )
 }

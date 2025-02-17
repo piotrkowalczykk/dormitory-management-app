@@ -54,3 +54,11 @@
 .hidden{
     display: none;
 }
+.editInput{
+    padding-top: 0.5rem;
+    align-self: start;
+    color: black;
+    border: none;
+    outline: none;
+    font-size: 0.75rem;
+}
