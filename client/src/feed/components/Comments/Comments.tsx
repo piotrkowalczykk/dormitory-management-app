@@ -88,7 +88,7 @@ export function Comments({ closeModal, postId, onCommentChange }) {
                             <SingleComment
                                 key={comment.id}
                                 commentId={comment.id}
-                                authorEmail={comment.author.email} 
+                                authorId={comment.author.id} 
                                 name={comment.author.firstName + " " + comment.author.lastName}
                                 date={comment.creationDate}
                                 content={comment.content}

@@ -6,7 +6,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../authentication/AuthProvider';
 import { useEffect, useRef, useState } from 'react';
 
-export function SingleComment({commentId, authorEmail, name, date, content, onDelete, onEdit}){
+export function SingleComment({commentId, authorId, name, date, content, onDelete, onEdit}){
 
     const {userDetails} = useAuth();
     const [isEditing, setIsEditing] = useState(false);
@@ -70,7 +70,7 @@ export function SingleComment({commentId, authorEmail, name, date, content, onDe
                         <h1 className={classes.userName}>{name}</h1>
                         <h2 className={classes.data}>{date}</h2>
                     </div>
-                    {userDetails.email === authorEmail && (
+                    {userDetails.id === authorId && (
                         isEditing ? 
                         <div className={classes.userBtns}>
                             <button className={classes.saveEdit} onClick={handleEdit}><FontAwesomeIcon icon={faPaperPlane} className={classes.editIcon} /></button>

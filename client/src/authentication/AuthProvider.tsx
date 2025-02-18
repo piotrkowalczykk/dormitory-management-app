@@ -7,6 +7,7 @@ export const AuthProvider = ({children}) => {
     const [userDetails, setUserDetails] = useState(() => {
         const savedDetails = localStorage.getItem("userDetails");
         return savedDetails ? JSON.parse(savedDetails) : {
+            id: "",
             email: "",
             firstName: "",
             lastName: "",
@@ -31,6 +32,7 @@ export const AuthProvider = ({children}) => {
     const logout = () => {
         setToken(null);
         setUserDetails({
+            id: "",
             email: "",
             firstName: "",
             lastName: "",

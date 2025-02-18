@@ -58,6 +58,7 @@ export function Login(){
                     if (response.ok) {
                         const userData = await response.json();
                         const userDetailsToSave = {
+                            id: userData.id,
                             email: userData.email,
                             firstName: userData.firstName,
                             lastName: userData.lastName,

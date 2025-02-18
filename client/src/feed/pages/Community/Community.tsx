@@ -46,9 +46,9 @@ export function Community(){
                             postId={post.id}
                             content={post.content}
                             image={post.image}
-                            name={post.author.firstName + post.author.lastName}
+                            name={post.author.firstName + " " + post.author.lastName}
                             date={post.creationDate}
-                            likes={post.likes}
+                            likes={post.likedUsers}
                             comments={post.comments}
                         />
                     ))
