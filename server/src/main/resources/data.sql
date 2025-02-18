@@ -42,7 +42,7 @@ WHERE NOT EXISTS (SELECT 1 FROM academies WHERE email = 'agh@dormitory.com');
 --ACCOUNT
 INSERT INTO users (created_at, date_of_birth, email_verified, email_verification_code_expiry_date, password_reset_code_expiry_date, academy_id,
                    email, email_verification_code, first_name, gender, last_name, password, password_reset_code)
-SELECT null, null, true, null, null, 1, 'agh@dormitory.com', null, 'agh', null, null,
+SELECT null, null, true, null, null, 1, 'agh@dormitory.com', null, 'AGH', null, '[Academy]',
        '$2a$10$hBrh.x5Hl6YV5LMfYLI9tu6nkslLk2Jv2Pts2It3S1xHXl/O4.q0y', null
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'agh@dormitory.com');
 
@@ -79,7 +79,7 @@ WHERE NOT EXISTS (SELECT 1 FROM academies WHERE email = 'pk@dormitory.com');
 --ACCOUNT
 INSERT INTO users (created_at, date_of_birth, email_verified, email_verification_code_expiry_date, password_reset_code_expiry_date, academy_id,
                    email, email_verification_code, first_name, gender, last_name, password, password_reset_code)
-SELECT null, null, true, null, null, 2, 'pk@dormitory.com', null, 'pk', null, null,
+SELECT null, null, true, null, null, 2, 'pk@dormitory.com', null, 'PK', null, '[Academy]',
        '$2a$10$zqIHCI6sq74IpOS9R2RCEeTIJnMc9Cmq5sCKy.pXeuavCO5uwBd1.', null
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'pk@dormitory.com');
 

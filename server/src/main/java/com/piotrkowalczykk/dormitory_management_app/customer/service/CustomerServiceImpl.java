@@ -69,7 +69,6 @@ public class CustomerServiceImpl implements CustomerService {
         article.setDescription(articleRequest.getDescription());
         article.setContent(articleRequest.getContent());
         article.setImage(imagePath);
-        article.setCreationDate(LocalDateTime.now());
 
         return articleRepository.save(article);
     }

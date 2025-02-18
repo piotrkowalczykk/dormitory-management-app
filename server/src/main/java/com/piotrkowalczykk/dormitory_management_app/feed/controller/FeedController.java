@@ -2,9 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.feed.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.CommentRequest;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.PostRequest;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.*;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Comment;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import com.piotrkowalczykk.dormitory_management_app.feed.service.FeedService;
@@ -13,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/feed")
@@ -47,8 +46,8 @@ public class FeedController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<Post>> getAllPosts(){
-        List<Post> listOfPosts = feedService.getAllPosts();
+    public ResponseEntity<List<PostDTO>> getAllPosts(){
+        List<PostDTO> listOfPosts = feedService.getAllPosts();
         return ResponseEntity.ok(listOfPosts);
     }
 
@@ -71,9 +70,15 @@ public class FeedController {
     }
 
     @PutMapping("/posts/{postId}/like")
-    public ResponseEntity<Post> likePost(@PathVariable Long postId){
-        Post post = feedService.likePost(postId);
+    public ResponseEntity<PostDTO> likePost(@PathVariable Long postId){
+        PostDTO post = feedService.likePost(postId);
         return ResponseEntity.ok(post);
+    }
+
+    @GetMapping("/posts/{postId}/likes")
+    public ResponseEntity<Set<PublicUserDTO>> getPostLikes(@PathVariable Long postId){
+        Set<PublicUserDTO> setOfLikes = feedService.getPostLikes(postId);
+        return ResponseEntity.ok(setOfLikes);
     }
 
     @PostMapping("/posts/{postId}/comments")
@@ -83,8 +88,8 @@ public class FeedController {
     }
 
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable Long postId){
-        List<Comment> listOfComments = feedService.getComments(postId);
+    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable Long postId){
+        List<CommentDTO> listOfComments = feedService.getComments(postId);
         return ResponseEntity.ok(listOfComments);
     }
 

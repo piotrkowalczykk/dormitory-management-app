@@ -5,9 +5,7 @@ import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepo
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.CommentRequest;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.PostRequest;
-import com.piotrkowalczykk.dormitory_management_app.feed.dto.UserDetailsResponse;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.*;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Comment;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
 import com.piotrkowalczykk.dormitory_management_app.feed.repository.CommentRepository;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +59,7 @@ public class FeedServiceImpl implements FeedService{
 
         if(isAdmin){
             return new UserDetailsResponse(
+                    user.getId(),
                     user.getEmail(),
                     user.getFirstName(),
                     user.getLastName(),
@@ -72,6 +72,7 @@ public class FeedServiceImpl implements FeedService{
         }
 
         return new UserDetailsResponse(
+                user.getId(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
@@ -97,7 +98,7 @@ public class FeedServiceImpl implements FeedService{
                 article.getTitle(),
                 article.getDescription(),
                 article.getImage(),
-                article.getCreationDate().toLocalDate(),
+                article.getCreationDate(),
                 article.getContent()
         )).collect(Collectors.toList());
     }
@@ -112,18 +113,49 @@ public class FeedServiceImpl implements FeedService{
                 article.getTitle(),
                 article.getContent(),
                 article.getImage(),
-                article.getCreationDate().toLocalDate(),
+                article.getCreationDate(),
                 article.getContent()
         );
     }
 
     @Override
-    public List<Post> getAllPosts() {
+    public List<PostDTO> getAllPosts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthUser user = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("User not found"));
 
-        return postRepository.findAllPostsByAcademyId(user.getAcademy().getId());
+        List<Post> listOfPosts =  postRepository.findAllPostsByAcademyId(user.getAcademy().getId());
+
+        return listOfPosts.stream().map(post -> new PostDTO(
+                post.getId(),
+                post.getContent(),
+                post.getImage(),
+                new PublicUserDTO(
+                        post.getAuthor().getId(),
+                        post.getAuthor().getFirstName(),
+                        post.getAuthor().getLastName(),
+                        "avatar"),
+                post.getLikes().stream().map(likedUser -> new PublicUserDTO(
+                        likedUser.getId(),
+                        likedUser.getFirstName(),
+                        likedUser.getLastName(),
+                        "avatar"
+                )).collect(Collectors.toSet()),
+                post.getComments().stream().map(comment -> new CommentDTO(
+                        comment.getId(),
+                        comment.getContent(),
+                        new PublicUserDTO(
+                                comment.getAuthor().getId(),
+                                comment.getAuthor().getFirstName(),
+                                comment.getAuthor().getLastName(),
+                                "avatar"
+                        ),
+                        comment.getCreationDate(),
+                        comment.getLastModifiedDate()
+                )).collect(Collectors.toList()),
+                post.getCreationDate(),
+                post.getLastModifiedDate()
+        )).collect(Collectors.toList());
     }
 
     @Override
@@ -166,7 +198,7 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
-    public Post likePost(Long postId) {
+    public PostDTO likePost(Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new IllegalArgumentException("Post not found"));
@@ -183,7 +215,37 @@ public class FeedServiceImpl implements FeedService{
             post.getLikes().add(user);
         }
 
-        return postRepository.save(post);
+        postRepository.save(post);
+
+        return new PostDTO(
+                post.getId(),
+                post.getContent(),
+                post.getImage(),
+                new PublicUserDTO(
+                        post.getAuthor().getId(),
+                        post.getAuthor().getFirstName(),
+                        post.getAuthor().getLastName(),
+                        "avatar"),
+                post.getLikes().stream().map(like -> new PublicUserDTO(
+                        like.getId(),
+                        like.getFirstName(),
+                        like.getLastName(),
+                        "avatar"
+                )).collect(Collectors.toSet()),
+                post.getComments().stream().map(comment -> new CommentDTO(
+                        comment.getId(),
+                        comment.getContent(),
+                        new PublicUserDTO(
+                                comment.getAuthor().getId(),
+                                comment.getAuthor().getFirstName(),
+                                comment.getAuthor().getLastName(),
+                                "avatar"),
+                        comment.getCreationDate(),
+                        comment.getLastModifiedDate()
+                )).collect(Collectors.toList()),
+                post.getCreationDate(),
+                post.getLastModifiedDate()
+        );
     }
 
     @Override
@@ -199,7 +261,7 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
-    public List<Comment> getComments(Long postId) {
+    public List<CommentDTO> getComments(Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new IllegalArgumentException("Post not found"));
@@ -209,7 +271,17 @@ public class FeedServiceImpl implements FeedService{
         if(!user.getAcademy().equals(post.getAuthor().getAcademy())){
             throw new AccessDeniedException("This post was created by a user from a different academy.");
         }
-        return post.getComments();
+        return post.getComments().stream().map(comment -> new CommentDTO(
+                comment.getId(),
+                comment.getContent(),
+                new PublicUserDTO(
+                        comment.getAuthor().getId(),
+                        comment.getAuthor().getFirstName(),
+                        comment.getAuthor().getLastName(),
+                        "avatar"),
+                comment.getCreationDate(),
+                comment.getLastModifiedDate()
+        )).collect(Collectors.toList());
     }
 
     @Override
@@ -241,5 +313,25 @@ public class FeedServiceImpl implements FeedService{
         }
 
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public Set<PublicUserDTO> getPostLikes(Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new IllegalArgumentException("Post not found"));
+        AuthUser user = authUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+
+        if(!user.getAcademy().equals(post.getAuthor().getAcademy())){
+            throw new AccessDeniedException("This post was created by a user from a different academy.");
+        }
+
+        return post.getLikes().stream().map(authUser -> new PublicUserDTO(
+                authUser.getId(),
+                authUser.getFirstName(),
+                authUser.getLastName(),
+                "avatar"
+        )).collect(Collectors.toSet());
     }
 }

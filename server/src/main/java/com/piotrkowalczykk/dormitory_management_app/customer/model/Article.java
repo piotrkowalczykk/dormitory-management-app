@@ -2,6 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.customer.model;
 
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ public class Article {
     private String image;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private AuthUser author;
+    @CreationTimestamp
     private LocalDateTime creationDate;
 
     public Article(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate) {

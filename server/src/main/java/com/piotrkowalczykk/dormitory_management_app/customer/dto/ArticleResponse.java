@@ -1,16 +1,20 @@
 package com.piotrkowalczykk.dormitory_management_app.customer.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ArticleResponse {
     private Long id;
     private String title;
     private String description;
     private String image;
-    private LocalDate creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime creationDate;
     private String content;
 
-    public ArticleResponse(Long id, String title, String description, String image, LocalDate creationDate, String content) {
+    public ArticleResponse(Long id, String title, String description, String image, LocalDateTime creationDate, String content) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -51,11 +55,11 @@ public class ArticleResponse {
         this.image = image;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

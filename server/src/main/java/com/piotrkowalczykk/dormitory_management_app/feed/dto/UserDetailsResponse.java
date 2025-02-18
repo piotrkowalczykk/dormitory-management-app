@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class UserDetailsResponse {
+    private Long id;
     private String email;
     private String firstName;
     private String lastName;
@@ -17,7 +18,8 @@ public class UserDetailsResponse {
     private List<Role> roles;
     private List<Post> posts;
 
-    public UserDetailsResponse(String email, String firstName, String lastName, Gender gender, LocalDate dateOfBirth, String academyName, List<Role> roles, List<Post> posts) {
+    public UserDetailsResponse(Long id, String email, String firstName, String lastName, Gender gender, LocalDate dateOfBirth, String academyName, List<Role> roles, List<Post> posts) {
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +28,14 @@ public class UserDetailsResponse {
         this.academyName = academyName;
         this.roles = roles;
         this.posts = posts;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
