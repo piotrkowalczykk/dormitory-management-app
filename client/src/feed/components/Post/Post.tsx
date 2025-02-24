@@ -8,26 +8,27 @@ import { useEffect, useState } from 'react';
 import { Comments } from '../Comments/Comments';
 import { useAuth } from '../../../authentication/AuthProvider';
 import { ListOfLikes } from '../ListOfLikes/ListOfLikes';
-export function Post({postId, content, image, name, date, likes, comments}){
+import { PostEditor } from '../PostEditor/PostEditor';
+export function Post({post}){
 
+    
+    const [isPostEditorOpen, setIsPostEditorOpen] = useState(false);
     const [isCommentOpen, setIsCommentOpen] = useState(false);
     const [isLikeOpen, setIsLikeOpen] = useState(false);
     const [isPostLiked, setIsPostLiked] = useState(false);
-    const [likesCounter, setLikesCounter] = useState(likes.length);
-    const [commentsCounter, setCommentsCounter] = useState(comments.length);
+    const [likesCounter, setLikesCounter] = useState(post.likedUsers.length);
+    const [commentsCounter, setCommentsCounter] = useState(post.comments.length);
     const {userDetails} = useAuth();
     
-    const handleComment = () => {
-        setIsCommentOpen(true);
-    }
-    
-    const handleLikedUsers = () => {
-        setIsLikeOpen(true);
-    }
+    useEffect(() => {
+        setIsPostLiked(post.likedUsers?.some(user => user.id === userDetails.id) ?? false);
+    }, [post, userDetails.id]);
+
+
 
     const handleLikePost = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/feed/posts/${postId}/like`, {
+            const response = await fetch(`http://localhost:8080/feed/posts/${post.id}/like`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -46,10 +47,20 @@ export function Post({postId, content, image, name, date, likes, comments}){
         }
     }
 
-    useEffect(()=>{
-        console.log(userDetails.id)
-        setIsPostLiked(likes.some(user => user.id === userDetails.id));
-    }, [likes, userDetails.id]);
+    const handleDeletePost = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/feed/posts/${post.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            onPostDelete();
+        } catch (error){
+            console.log(error);
+        }
+    }
 
     return(
         <>
@@ -58,29 +69,29 @@ export function Post({postId, content, image, name, date, likes, comments}){
                 <div className={classes.userData}>
                     <img className={classes.userAvatar} src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg" />
                     <div className={classes.userDataContainer}>
-                        <h1 className={classes.userName}>{name}</h1>
-                        <h2 className={classes.data}>{date}</h2>
+                        <h1 className={classes.userName}>{post.author.firstName + " " + post.author.lastName}</h1>
+                        <h2 className={classes.data}>{post.creationDate}</h2>
                     </div>
                 </div>
-                <div className={classes.userBtns}>
-                    <button className={classes.editPost}><FontAwesomeIcon icon={faEdit} className={classes.editIcon} /></button>
-                    <button className={classes.deletePost}><FontAwesomeIcon icon={faTrash} className={classes.deleteIcon} /></button>
-                </div>
+                {userDetails.id === post.author.id && (<div className={classes.userBtns}>
+                    <button className={classes.editPost} onClick={()=>setIsPostEditorOpen(true)}><FontAwesomeIcon icon={faEdit} className={classes.editIcon} /></button>
+                    <button className={classes.deletePost} onClick={handleDeletePost}><FontAwesomeIcon icon={faTrash} className={classes.deleteIcon} /></button>
+                </div>)}
             </div>
-            <p className={classes.content}>{content}</p>
-            <img className={classes.image} src={image} />
+            <p className={classes.content}>{post.content}</p>
+            <img className={classes.image} src={post.image} />
             <div className={classes.stats}>
-                <button className={classes.likes} onClick={handleLikedUsers}>👍 {likesCounter}</button>
-                <button className={classes.comments} onClick={handleComment}>💬 {commentsCounter}</button>
+                <button className={classes.likes} onClick={()=>setIsLikeOpen(true)}>👍 {likesCounter}</button>
+                <button className={classes.comments} onClick={()=>setIsCommentOpen(true)}>💬 {commentsCounter}</button>
             </div>
             <div className={classes.btns}>
-                {console.log(isPostLiked)}
                 <button className={`${classes.like} ${isPostLiked ? classes.liked : ""}`} onClick={handleLikePost}><FontAwesomeIcon icon={faThumbsUp} /> I like it!</button>
-                <button className={classes.comment} onClick={handleComment}><FontAwesomeIcon icon={faComment} /> Comment</button>
+                <button className={classes.comment} onClick={()=>setIsCommentOpen(true)}><FontAwesomeIcon icon={faComment} /> Comment</button>
             </div>
         </div>
-        {isCommentOpen && <Comments closeModal={() => setIsCommentOpen(false)} postId={postId} onCommentChange={setCommentsCounter}/>}
-        {isLikeOpen && <ListOfLikes closeModal={() => setIsLikeOpen(false)} postId={postId} />}
+        {isCommentOpen && <Comments closeModal={() => setIsCommentOpen(false)} postId={post.id} onCommentChange={setCommentsCounter}/>}
+        {isLikeOpen && <ListOfLikes closeModal={() => setIsLikeOpen(false)} postId={post.id} />}
+        {isPostEditorOpen && <PostEditor closeModal={()=>setIsPostEditorOpen(false)} post={post} />}
         </>
     )
 }

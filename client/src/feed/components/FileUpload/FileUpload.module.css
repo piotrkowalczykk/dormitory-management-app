@@ -2,45 +2,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    width: 80%;
-}
-
-.input {
-    display: none;
-}
-
-.imageOutline {
-    width: 80%;
-    max-width: 200px;
-    aspect-ratio: 1/1;
-    border: 2px dashed green;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    overflow: hidden;
-    border-radius: 0.25rem
+    max-width: 200px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    border: 1px dashed black;
+    position: relative;
 }
-
 .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: absolute;
 }
-
-.uploadButton {
-    background-color: green;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+.content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    text-align: center;
+    gap: 0.5rem;
 }
-
-.uploadButton:hover {
-    color: yellow;
+.icon{
+    font-size: 2rem;
 }
-
 .removeButton{
     background-color: red;
     color: white;
@@ -50,4 +37,7 @@
 }
 .removeButton:hover{
     background-color: rgb(204, 25, 25);
+}
+.input {
+    display: none;
 }

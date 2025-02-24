@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import classes from "./FileUpload.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 export function FileUpload({ onFileSelect, initialImage, onRemoveImage }) {
     const [preview, setPreview] = useState(null);
@@ -22,25 +24,22 @@ export function FileUpload({ onFileSelect, initialImage, onRemoveImage }) {
     const handleRemove = () => {
         setPreview(null);
         onRemoveImage();
+        const inputElement = document.getElementById("fileInput");
+        inputElement.value = "";
     };
 
     return (
         <div className={classes.container}>
-            <div className={classes.imageOutline}>
-                {preview && <img src={preview} className={classes.image} />}
-            </div>
-
+            {preview && <img src={preview} className={classes.image} />}
             <input 
                 type="file"
                 id="fileInput"
                 className={classes.input} 
                 onChange={handleFileChange} 
             />
-
-            <label htmlFor="fileInput" className={classes.uploadButton}>
-                Upload Image
+            <label htmlFor="fileInput" className={classes.content}>
+                <FontAwesomeIcon icon={faImage} className={classes.icon}/>
             </label>
-
             {preview && (
                 <button onClick={handleRemove} className={classes.removeButton}>
                     X

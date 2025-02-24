@@ -24,6 +24,33 @@
     margin-top: 2rem;
     font-size: 4rem;
 }
+.newPostContainer{
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+    box-shadow: 4px 6px 24px -9px rgba(66, 68, 90, 1);
+    background-color: white;
+    padding: 1rem;
+    width: 90%;
+    margin-top: 2rem;
+}
+.newPostBtn{
+    width: 80%;
+    border: 3px solid rgb(247, 244, 244);
+    border-radius: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.publishBtn:hover{
+    color: yellow;
+}
+
 @media (max-width: 500px) {
     .title{
         font-size: 2.5rem;
