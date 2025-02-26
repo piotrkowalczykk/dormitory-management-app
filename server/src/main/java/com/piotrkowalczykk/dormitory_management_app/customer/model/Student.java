@@ -14,6 +14,10 @@ public class Student {
     private String studentNumber;
     @ManyToOne(cascade = CascadeType.ALL)
     private Academy academy;
+    @OneToOne
+    @JoinColumn(name = "dormitory_id")
+    private Dormitory dormitory;
+    private String room;
 
     public Student(Long id, String email, String studentNumber, Academy academy) {
         this.id = id;
