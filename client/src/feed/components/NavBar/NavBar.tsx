@@ -9,7 +9,7 @@ export function NavBar({ onToggleSideBar }: { onToggleSidebar: () => void }){
     return (
         <div className={classes.container}>
             <Link to="/">
-                <img src='logo.png' className={classes.logo}/>
+                <img src='/public/logo.png' className={classes.logo}/>
             </Link>
             <button onClick={onToggleSideBar}>
                 <FontAwesomeIcon icon={faBars} className={classes.btn}/>

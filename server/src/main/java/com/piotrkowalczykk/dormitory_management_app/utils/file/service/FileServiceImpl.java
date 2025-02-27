@@ -21,7 +21,7 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService{
 
     private final String BASE_UPLOAD_DIR = "/uploads";
-    private final String BASE_URL = "http://localhost:8080";
+    private final String BASE_URL = "http://localhost:8080/api/uploads/";
 
     @Override
     public String saveFile(MultipartFile file, String directoryName){
@@ -37,7 +37,7 @@ public class FileServiceImpl implements FileService{
             Path filePath = uploadPath.resolve(uniqueFileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return directoryName + "/" + uniqueFileName;
+            return BASE_URL + directoryName + "/" + uniqueFileName;
         } catch (IOException e){
             throw new FileStorageException("Error saving file: " + e.getMessage());
         }
@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService{
     @Override
     public boolean deleteImage(String fileName) {
         try{
-            Path filePath = Paths.get(BASE_UPLOAD_DIR).resolve(fileName);
+            Path filePath = Paths.get(BASE_UPLOAD_DIR).resolve(fileName.substring(BASE_URL.length()));
             boolean isDeleted = Files.deleteIfExists(filePath);
             return isDeleted;
         } catch (IOException e){

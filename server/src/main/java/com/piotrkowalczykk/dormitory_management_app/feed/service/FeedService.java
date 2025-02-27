@@ -24,5 +24,4 @@ public interface FeedService {
     public Comment editComment(Long commentId, CommentRequest commentRequest);
     public void deleteComment(Long commentId);
     public Set<PublicUserDTO> getPostLikes(Long postId);
-
 }

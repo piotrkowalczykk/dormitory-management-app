@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { Layout } from '../../components/Layout/Layout';
 import classes from './ArticleDetail.module.css'
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 export function ArticleDetail(){
 
     const location = useLocation();
@@ -25,7 +26,7 @@ export function ArticleDetail(){
         });
         const data = await response.json();
         setArticle({
-            image: data.image ? `http://localhost:8080/api/uploads/${data.image}` : '',
+            image: data.image ? data.image : '',
             title: data.title,
             content: data.content,
             date: data.creationDate,
@@ -40,7 +41,11 @@ export function ArticleDetail(){
     }, []);
 
     return (
-        <Layout>
+        <Layout pageTitle="Home" navigation={
+            <> 
+            / <Link to='/'>Home</Link> / <span style={{ color: 'red' }}>{article.title}</span>
+            </>
+        }>
         <div className={classes.container}>
             <div className={classes.innerContainer}>
                 {article.image && <img className={classes.image} src={article.image} />}

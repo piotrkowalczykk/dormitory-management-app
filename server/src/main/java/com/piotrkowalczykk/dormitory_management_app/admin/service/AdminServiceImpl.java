@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AcademyServiceImpl implements AcademyService{
+public class AdminServiceImpl implements AdminService {
 
     private final AcademyRepository academyRepository;
 
-    public AcademyServiceImpl(AcademyRepository academyRepository){
+    public AdminServiceImpl(AcademyRepository academyRepository){
         this.academyRepository = academyRepository;
     }
 
