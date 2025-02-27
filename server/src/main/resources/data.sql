@@ -58,6 +58,12 @@ WHERE users.email = 'agh@dormitory.com'
       WHERE ur.user_id = users.id AND ur.role_id = roles.id
   );
 
+--DORMITORIES
+INSERT INTO dormitories (name, address, phone, academy_id)
+VALUES ('Olimp', 'Ul. Rostafińskiego 9', '111 111 111', 1);
+VALUES ('Kapitol', 'Ul. Budryka 2', '222 222 222', 1);
+VALUES ('Odyseja', 'Ul. Tokarskiego 4', '333 333 333', 1);
+
 --STUDENTS
 INSERT INTO students (email, student_number, academy_id)
 SELECT 'peter@student.agh.edu', '#121212', 1

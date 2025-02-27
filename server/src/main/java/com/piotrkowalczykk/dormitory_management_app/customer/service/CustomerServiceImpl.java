@@ -4,8 +4,10 @@ import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
+import com.piotrkowalczykk.dormitory_management_app.customer.repository.DormitoryRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.StudentRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
@@ -24,14 +26,16 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private final FileService fileService;
+    private final DormitoryRepository dormitoryRepository;
     private final ArticleRepository articleRepository;
     private final StudentRepository studentRepository;
     private final AuthUserRepository authUserRepository;
     private final AcademyRepository academyRepository;
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    public CustomerServiceImpl(FileService fileService, ArticleRepository articleRepository, StudentRepository studentRepository, AuthUserRepository authUserRepository, AcademyRepository academyRepository) {
+    public CustomerServiceImpl(FileService fileService, DormitoryRepository dormitoryRepository, ArticleRepository articleRepository, StudentRepository studentRepository, AuthUserRepository authUserRepository, AcademyRepository academyRepository) {
         this.fileService = fileService;
+        this.dormitoryRepository = dormitoryRepository;
         this.articleRepository = articleRepository;
         this.studentRepository = studentRepository;
         this.authUserRepository = authUserRepository;
@@ -113,6 +117,13 @@ public class CustomerServiceImpl implements CustomerService {
         article.setTitle(articleRequest.getTitle());
         article.setContent(articleRequest.getContent());
         article.setDescription(articleRequest.getDescription());
+        article.setLastModifiedDate(LocalDateTime.now());
         return articleRepository.save(article);
+    }
+
+    @Override
+    public List<Dormitory> getAllDormitories() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return dormitoryRepository.findAllByAcademyEmail(authentication.getName());
     }
 }

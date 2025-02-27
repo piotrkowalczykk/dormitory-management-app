@@ -2,6 +2,7 @@ import classes from './Home.module.css'
 import { Article } from '../../components/Article/Article'
 import { useEffect, useState } from 'react'
 import { Layout } from '../../components/Layout/Layout'
+import { Link } from 'react-router-dom';
 export function Home(){
 
     const [articles, setArticles] = useState([]);
@@ -36,12 +37,13 @@ export function Home(){
 
     
     return (
-        <Layout>
+        <Layout pageTitle="Home" navigation={
+            <> 
+            / <Link to="/"><span style={{ color: 'red' }}>Home</span></Link>
+            </>
+        }>
         <div className={classes.container}>
             <div className={classes.main}>
-                <div className={classes.title}>
-                    <h1><span style={{color: 'red'}}>.</span>News</h1>
-                </div>
                 {isLoading ? <p>Loading...</p> : 
                     articles.map(article => 
                         (

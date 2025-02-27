@@ -52,13 +52,13 @@ public class FeedController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest){
+    public ResponseEntity<Post> createPost(@ModelAttribute PostRequest postRequest){
         Post post = feedService.createPost(postRequest);
         return ResponseEntity.ok(post);
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<Post> editPost(@RequestBody PostRequest postRequest, @PathVariable Long postId){
+    public ResponseEntity<Post> editPost(@ModelAttribute PostRequest postRequest, @PathVariable Long postId){
         Post post = feedService.editPost(postRequest, postId);
         return ResponseEntity.ok(post);
     }
@@ -104,5 +104,4 @@ public class FeedController {
         feedService.deleteComment(commentId);
         return ResponseEntity.ok("Comment deleted successfully");
     }
-
 }

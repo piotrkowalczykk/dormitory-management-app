@@ -13,6 +13,7 @@ import com.piotrkowalczykk.dormitory_management_app.feed.repository.PostReposito
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.utils.JsonWebToken;
+import com.piotrkowalczykk.dormitory_management_app.utils.file.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FeedServiceImpl implements FeedService{
+    private final FileService fileService;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final JsonWebToken jsonWebToken;
@@ -35,7 +37,8 @@ public class FeedServiceImpl implements FeedService{
     private final AuthUserRepository authUserRepository;
     private static final Logger logger = LoggerFactory.getLogger(FeedServiceImpl.class);
 
-    public FeedServiceImpl(CommentRepository commentRepository, PostRepository postRepository, AcademyRepository academyRepository, AuthUserRepository authUserRepository, JsonWebToken jsonWebToken, ArticleRepository articleRepository) {
+    public FeedServiceImpl(FileService fileService, CommentRepository commentRepository, PostRepository postRepository, AcademyRepository academyRepository, AuthUserRepository authUserRepository, JsonWebToken jsonWebToken, ArticleRepository articleRepository) {
+        this.fileService = fileService;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.academyRepository = academyRepository;
@@ -99,7 +102,8 @@ public class FeedServiceImpl implements FeedService{
                 article.getDescription(),
                 article.getImage(),
                 article.getCreationDate(),
-                article.getContent()
+                article.getContent(),
+                article.getLastModifiedDate()
         )).collect(Collectors.toList());
     }
 
@@ -114,7 +118,8 @@ public class FeedServiceImpl implements FeedService{
                 article.getContent(),
                 article.getImage(),
                 article.getCreationDate(),
-                article.getContent()
+                article.getContent(),
+                article.getLastModifiedDate()
         );
     }
 
@@ -164,7 +169,12 @@ public class FeedServiceImpl implements FeedService{
         AuthUser user = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("User not found"));
 
-        Post post = new Post(postRequest.getContent(), postRequest.getImage(), user);
+        String imagePath = null;
+        if(postRequest.getImage() != null && !postRequest.getImage().isEmpty()){
+            imagePath = fileService.saveFile(postRequest.getImage(), "posts");
+        }
+
+        Post post = new Post(postRequest.getContent(), imagePath, user);
         return postRepository.save(post);
     }
 
@@ -178,8 +188,14 @@ public class FeedServiceImpl implements FeedService{
             throw new AccessDeniedException("You are not the owner of this post");
         }
 
+        String imagePath = post.getImage();
+
+        if(postRequest.getImage() != null && !postRequest.getImage().isEmpty()){
+            imagePath = fileService.saveFile(postRequest.getImage(), "posts");
+        }
+
         post.setContent(postRequest.getContent());
-        post.setImage(postRequest.getImage());
+        post.setImage(imagePath);
         post.setLastModifiedDate(LocalDateTime.now());
         return postRepository.save(post);
     }
@@ -194,6 +210,7 @@ public class FeedServiceImpl implements FeedService{
             throw new AccessDeniedException("You are not the owner of this post");
         }
 
+        fileService.deleteImage(post.getImage());
         postRepository.delete(post);
     }
 

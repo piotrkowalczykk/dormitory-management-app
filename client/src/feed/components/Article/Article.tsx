@@ -34,7 +34,7 @@ export const Article: FC<ArticleProps> = ({
                 </div>
             </div>
             <div className={classes.image}>
-                {image && <img src={`http://localhost:8080/api/uploads/${image}`} />}
+                {image && <img src={image} />}
             </div>
         </div>
     )

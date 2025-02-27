@@ -12,15 +12,18 @@ public class ArticleResponse {
     private String image;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime lastModifiedDate;
     private String content;
 
-    public ArticleResponse(Long id, String title, String description, String image, LocalDateTime creationDate, String content) {
+    public ArticleResponse(Long id, String title, String description, String image, LocalDateTime creationDate, String content, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
         this.creationDate = creationDate;
         this.content = content;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Long getId() {
@@ -69,5 +72,13 @@ public class ArticleResponse {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }

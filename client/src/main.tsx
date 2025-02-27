@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/manage-articles",
+    path: "/dashboard/articles",
     element: (
       <ProtectedRoute>
         <AdminRoute>

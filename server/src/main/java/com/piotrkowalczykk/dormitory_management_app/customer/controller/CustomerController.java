@@ -2,6 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.customer.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
 import com.piotrkowalczykk.dormitory_management_app.customer.service.CustomerService;
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,9 @@ public class CustomerController {
        return ResponseEntity.ok(article);
     }
 
-    @GetMapping("/siema")
-    public ResponseEntity<String> hello(){
-        return ResponseEntity.ok("siema");
+    @GetMapping("/dormitories")
+    public ResponseEntity<List<Dormitory>> getAllDormitories(){
+        List<Dormitory> listOfDormitories = customerService.getAllDormitories();
+        return ResponseEntity.ok(listOfDormitories);
     }
 }

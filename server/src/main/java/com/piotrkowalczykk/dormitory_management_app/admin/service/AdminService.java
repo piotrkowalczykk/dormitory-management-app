@@ -6,7 +6,7 @@ import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 
 import java.util.Optional;
 
-public interface AcademyService {
+public interface AdminService {
     public AddAcademyResponse addAcademy(AddAcademyRequest addAcademyRequest);
 
     Optional<Academy> findByName(String name);

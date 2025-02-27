@@ -23,8 +23,9 @@ public class Article {
     private AuthUser author;
     @CreationTimestamp
     private LocalDateTime creationDate;
+    private LocalDateTime lastModifiedDate;
 
-    public Article(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate) {
+    public Article(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,6 +33,7 @@ public class Article {
         this.image = image;
         this.author = author;
         this.creationDate = creationDate;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Article(){
@@ -92,5 +94,13 @@ public class Article {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }
