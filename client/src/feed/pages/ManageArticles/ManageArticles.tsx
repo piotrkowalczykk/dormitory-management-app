@@ -57,6 +57,7 @@ export function ManageArticles(){
                             <th>Title</th>
                             <th>Creation Date</th>
                             <th>Last Modification Date</th>
+                            <th>Visibility</th>
                             <th>Manage</th>
                         </tr>
                     </thead>
@@ -67,6 +68,7 @@ export function ManageArticles(){
                                 <td>{article.title}</td>
                                 <td>{article.creationDate}</td>
                                 <td>{article.lastModifiedDate}</td>
+                                <td>{article.visibility}</td>
                                 <td>
                                     <button className={classes.manageBtn} title='View' style={{background: 'blueviolet'}} ><FontAwesomeIcon icon={faEye} className={classes.manageIcon} /></button>
                                     <button className={classes.manageBtn} title='Edit' style={{background: 'yellow'}} ><FontAwesomeIcon icon={faEdit} className={classes.manageIcon} /></button>

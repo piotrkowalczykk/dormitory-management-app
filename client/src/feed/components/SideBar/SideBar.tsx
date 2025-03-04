@@ -27,18 +27,12 @@ export function SideBar({isVisible}: {isVisible: boolean}){
                     </li>
                     {userDetails.roles.some(item => item.name == "CUSTOMER") ? 
                         <li>
-                        <NavLink to="/manage-articles" className={classes.navigationItem}>
+                        <NavLink to="/dashboard" className={classes.navigationItem}>
                             <FontAwesomeIcon icon={faNewspaper}  className={classes.icon}/>
-                            <p className={classes.linkName}>Manage articles</p>
+                            <p className={classes.linkName}>Dashboard</p>
                         </NavLink>
                         </li>
                     : null}
-                    <li>
-                        <NavLink to="/dashboard" className={classes.navigationItem}>
-                            <FontAwesomeIcon icon={faCalendar} className={classes.icon}/>
-                            <p className={classes.linkName}>Dashboard</p>
-                        </NavLink>
-                    </li>
                     <li>
                         <NavLink to="/community" className={classes.navigationItem}>
                             <FontAwesomeIcon icon={faUserGroup} className={classes.icon}/>
