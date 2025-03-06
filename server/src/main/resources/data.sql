@@ -60,17 +60,24 @@ WHERE users.email = 'agh@dormitory.com'
 
 --DORMITORIES
 INSERT INTO dormitories (name, address, phone, academy_id)
-VALUES ('Olimp', 'Ul. Rostafińskiego 9', '111 111 111', 1);
-VALUES ('Kapitol', 'Ul. Budryka 2', '222 222 222', 1);
-VALUES ('Odyseja', 'Ul. Tokarskiego 4', '333 333 333', 1);
+SELECT 'Olimp', 'Ul. Rostafińskiego 9', '111 111 111', 1
+WHERE NOT EXISTS (SELECT 1 FROM dormitories WHERE name = 'Olimp');
+
+INSERT INTO dormitories (name, address, phone, academy_id)
+SELECT 'Kapitol', 'Ul. Budryka 2', '222 222 222', 1
+WHERE NOT EXISTS (SELECT 1 FROM dormitories WHERE name = 'Kapitol');
+
+INSERT INTO dormitories (name, address, phone, academy_id)
+SELECT 'Odyseja', 'Ul. Tokarskiego 4', '333 333 333', 1
+WHERE NOT EXISTS (SELECT 1 FROM dormitories WHERE name = 'Odyseja');
 
 --STUDENTS
-INSERT INTO students (email, student_number, academy_id)
-SELECT 'peter@student.agh.edu', '#121212', 1
+INSERT INTO students (email, student_number, academy_id, room, dormitory_id)
+SELECT 'peter@student.agh.edu', '#121212', 1, '1002A', 1
 WHERE NOT EXISTS (SELECT 1 FROM students WHERE email = 'peter@student.agh.edu');
 
-INSERT INTO students (email, student_number, academy_id)
-SELECT 'lily@student.agh.edu', '#212121', 1
+INSERT INTO students (email, student_number, academy_id, room, dormitory_id)
+SELECT 'lily@student.agh.edu', '#212121', 1, '500B', 2
 WHERE NOT EXISTS (SELECT 1 FROM students WHERE email = 'lily@student.agh.edu');
 
 -----------------
@@ -101,11 +108,21 @@ WHERE users.email = 'pk@dormitory.com'
       WHERE ur.user_id = users.id AND ur.role_id = roles.id
   );
 
+--DORMITORIES
+INSERT INTO dormitories (name, address, phone, academy_id)
+SELECT 'Bartek', 'Ul. Skarżyńskiego 7,', '126 482 554', 2
+WHERE NOT EXISTS (SELECT 1 FROM dormitories WHERE name = 'Bartek');
+
+INSERT INTO dormitories (name, address, phone, academy_id)
+SELECT 'Balon', 'Ul. Skarżyńskiego 9,', '126 470 813', 2
+WHERE NOT EXISTS (SELECT 1 FROM dormitories WHERE name = 'Balon');
+
+
 --STUDENTS
-INSERT INTO students (email, student_number, academy_id)
-SELECT 'jake@student.pk.edu', '#313131', 2
+INSERT INTO students (email, student_number, academy_id, room, dormitory_id)
+SELECT 'jake@student.pk.edu', '#313131', 2, '100B', 4
 WHERE NOT EXISTS (SELECT 1 FROM students WHERE email = 'jake@student.pk.edu');
 
-INSERT INTO students (email, student_number, academy_id)
-SELECT 'emily@student.pk.edu', '#131313', 2
+INSERT INTO students (email, student_number, academy_id, room, dormitory_id)
+SELECT 'emily@student.pk.edu', '#131313', 2, '203A', 5
 WHERE NOT EXISTS (SELECT 1 FROM students WHERE email = 'emily@student.pk.edu');

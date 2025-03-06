@@ -3,7 +3,6 @@ import { Post } from '../../components/Post/Post'
 import { PostEditor } from '../../components/PostEditor/PostEditor';
 import classes from './Community.module.css'
 import { useState, useEffect } from 'react';
-
 export function Community(){
 
     const [posts, setPosts] = useState([]);
@@ -40,13 +39,13 @@ export function Community(){
         }, []);
     
     return (
-        <Layout>
-            <>
+        <Layout pageTitle="Community" navigation={
+            <> 
+            / <span style={{color: 'red'}}>Community</span>
+            </>
+        }>
         <div className={classes.container}>
             <div className={classes.main}>
-                <div className={classes.title}>
-                    <h1><span style={{color: 'red'}}>.</span>Community</h1>
-                </div>
                 <div className={classes.newPostContainer}>
                     <button className={classes.newPostBtn} onClick={()=>setIsPostEditorOpen(true)}>What are you thinking about?</button>
                 </div>
@@ -62,7 +61,6 @@ export function Community(){
             </div>
         </div>
         {isPostEditorOpen && <PostEditor closeModal={()=>setIsPostEditorOpen(false)} />}
-        </>
         </Layout>
     )
 }

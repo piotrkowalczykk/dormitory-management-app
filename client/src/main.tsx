@@ -12,8 +12,9 @@ import { PublicRoute } from './authentication/Routes'
 import { AuthProvider } from './authentication/AuthProvider'
 import { Dashboard } from './feed/pages/Dashboard/Dashboard'
 import { ArticleDetail } from './feed/pages/ArticleDetail/ArticleDetail'
-import { ManageArticles } from './feed/pages/ManageArticles/ManageArticles'
+import { ArticlesPanel } from './feed/pages/Dashboard/ArticlesPanel/ArticlesPanel'
 import { Community } from './feed/pages/Community/Community'
+import { ManageArticle } from './feed/pages/Dashboard/ManageArticle/ManageArticle'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,20 +33,30 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/dashboard/articles",
     element: (
       <ProtectedRoute>
         <AdminRoute>
-          <ManageArticles />
+          <ArticlesPanel />
         </AdminRoute>
       </ProtectedRoute>
     ),
   },
   {
-    path: "/dashboard",
+    path: "/dashboard/articles/manage",
     element: (
       <ProtectedRoute>
-        <Dashboard />
+        <AdminRoute>
+          <ManageArticle />
+        </AdminRoute>
       </ProtectedRoute>
     ),
   },

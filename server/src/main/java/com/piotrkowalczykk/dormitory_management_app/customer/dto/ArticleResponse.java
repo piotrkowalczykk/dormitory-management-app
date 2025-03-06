@@ -1,9 +1,11 @@
 package com.piotrkowalczykk.dormitory_management_app.customer.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ArticleResponse {
     private Long id;
@@ -15,8 +17,9 @@ public class ArticleResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime lastModifiedDate;
     private String content;
+    private List<Dormitory> visibleInDormitories;
 
-    public ArticleResponse(Long id, String title, String description, String image, LocalDateTime creationDate, String content, LocalDateTime lastModifiedDate) {
+    public ArticleResponse(Long id, String title, String description, String image, LocalDateTime creationDate, String content, LocalDateTime lastModifiedDate, List<Dormitory> visibleInDormitories) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -24,6 +27,7 @@ public class ArticleResponse {
         this.creationDate = creationDate;
         this.content = content;
         this.lastModifiedDate = lastModifiedDate;
+        this.visibleInDormitories = visibleInDormitories;
     }
 
     public Long getId() {
@@ -80,5 +84,13 @@ public class ArticleResponse {
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public List<Dormitory> getVisibleInDormitories() {
+        return visibleInDormitories;
+    }
+
+    public void setVisibleInDormitories(List<Dormitory> visibleInDormitories) {
+        this.visibleInDormitories = visibleInDormitories;
     }
 }

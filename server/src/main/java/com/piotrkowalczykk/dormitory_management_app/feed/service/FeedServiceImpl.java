@@ -4,7 +4,9 @@ import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleResponse;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
+import com.piotrkowalczykk.dormitory_management_app.customer.repository.StudentRepository;
 import com.piotrkowalczykk.dormitory_management_app.feed.dto.*;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Comment;
 import com.piotrkowalczykk.dormitory_management_app.feed.model.Post;
@@ -18,16 +20,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class FeedServiceImpl implements FeedService{
+    private final StudentRepository studentRepository;
     private final FileService fileService;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
@@ -37,7 +42,8 @@ public class FeedServiceImpl implements FeedService{
     private final AuthUserRepository authUserRepository;
     private static final Logger logger = LoggerFactory.getLogger(FeedServiceImpl.class);
 
-    public FeedServiceImpl(FileService fileService, CommentRepository commentRepository, PostRepository postRepository, AcademyRepository academyRepository, AuthUserRepository authUserRepository, JsonWebToken jsonWebToken, ArticleRepository articleRepository) {
+    public FeedServiceImpl(StudentRepository studentRepository, FileService fileService, CommentRepository commentRepository, PostRepository postRepository, AcademyRepository academyRepository, AuthUserRepository authUserRepository, JsonWebToken jsonWebToken, ArticleRepository articleRepository) {
+        this.studentRepository = studentRepository;
         this.fileService = fileService;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
@@ -93,8 +99,17 @@ public class FeedServiceImpl implements FeedService{
         AuthUser user = authUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(()-> new IllegalArgumentException("User not found"));
 
-        List<Article> articles = articleRepository.findAllByAuthorEmail(user.getAcademy().getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Articles not found"));
+        List<Article> articles = new ArrayList<>();
+
+        if(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER"))){
+            articles = articleRepository.findAllByAuthorEmail(user.getAcademy().getEmail())
+                    .orElseThrow(() -> new IllegalArgumentException("Articles not found"));
+        } else {
+            Student student = studentRepository.findByEmail(authentication.getName())
+                    .orElseThrow(()-> new IllegalArgumentException("Student not found"));
+            articles = articleRepository.findAllByAuthorEmailAndDormitoryId(user.getAcademy().getEmail(), student.getDormitory().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Articles not found"));
+        }
 
         return articles.stream().map(article -> new ArticleResponse(
                 article.getId(),
@@ -103,7 +118,8 @@ public class FeedServiceImpl implements FeedService{
                 article.getImage(),
                 article.getCreationDate(),
                 article.getContent(),
-                article.getLastModifiedDate()
+                article.getLastModifiedDate(),
+                article.getVisibleInDormitories()
         )).collect(Collectors.toList());
     }
 
@@ -115,11 +131,12 @@ public class FeedServiceImpl implements FeedService{
         return new ArticleResponse(
                 article.getId(),
                 article.getTitle(),
-                article.getContent(),
+                article.getDescription(),
                 article.getImage(),
                 article.getCreationDate(),
                 article.getContent(),
-                article.getLastModifiedDate()
+                article.getLastModifiedDate(),
+                article.getVisibleInDormitories()
         );
     }
 

@@ -73,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
         article.setDescription(articleRequest.getDescription());
         article.setContent(articleRequest.getContent());
         article.setImage(imagePath);
+        article.setVisibleInDormitories(dormitoryRepository.findAllById(articleRequest.getVisibleInDormitories()));
 
         return articleRepository.save(article);
     }
@@ -88,7 +89,9 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         articleRepository.delete(article);
-        fileService.deleteImage(article.getImage());
+        if(article.getImage() != null){
+            fileService.deleteImage(article.getImage());
+        }
     }
 
     @Override
@@ -101,13 +104,13 @@ public class CustomerServiceImpl implements CustomerService {
             throw new AccessDeniedException("You are not the owner of this article");
         }
 
-        if(articleRequest.getImage() != null && !articleRequest.getImage().isEmpty()){
+        if(articleRequest.getImage() != null && !articleRequest.getImage().isEmpty() && articleRequest.getImage().getSize() > 0){
             if(article.getImage() != null && !article.getImage().isEmpty())
                 fileService.deleteImage(article.getImage());
 
             String imagePath = fileService.saveFile(articleRequest.getImage(), "articles");
             article.setImage(imagePath);
-        } else if (articleRequest.getImage() != null && articleRequest.getImage().isEmpty()){
+        } else if (articleRequest.getImage() == null){
             if(article.getImage() != null  && !article.getImage().isEmpty()) {
                 fileService.deleteImage(article.getImage());
                 article.setImage("");
@@ -118,6 +121,7 @@ public class CustomerServiceImpl implements CustomerService {
         article.setContent(articleRequest.getContent());
         article.setDescription(articleRequest.getDescription());
         article.setLastModifiedDate(LocalDateTime.now());
+        article.setVisibleInDormitories(dormitoryRepository.findAllById(articleRequest.getVisibleInDormitories()));
         return articleRepository.save(article);
     }
 

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "articles")
@@ -24,8 +25,13 @@ public class Article {
     @CreationTimestamp
     private LocalDateTime creationDate;
     private LocalDateTime lastModifiedDate;
+    @ManyToMany
+    @JoinTable(name = "article_dormitory_visibility",
+    joinColumns = @JoinColumn(name = "article_id"),
+    inverseJoinColumns = @JoinColumn(name = "dormitory_id"))
+    private List<Dormitory> visibleInDormitories;
 
-    public Article(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate, LocalDateTime lastModifiedDate) {
+    public Article(Long id, String title, String description, String content, String image, AuthUser author, LocalDateTime creationDate, LocalDateTime lastModifiedDate, List<Dormitory> visibleInDormitories) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,6 +40,7 @@ public class Article {
         this.author = author;
         this.creationDate = creationDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.visibleInDormitories = visibleInDormitories;
     }
 
     public Article(){
@@ -102,5 +109,13 @@ public class Article {
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public List<Dormitory> getVisibleInDormitories() {
+        return visibleInDormitories;
+    }
+
+    public void setVisibleInDormitories(List<Dormitory> visibleInDormitories) {
+        this.visibleInDormitories = visibleInDormitories;
     }
 }

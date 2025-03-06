@@ -15,7 +15,7 @@ export function ArticleDetail(){
         date: ''
     });
 
-    const fetchArticles = async () => {
+    const fetchArticle = async () => {
         try{
             const response = await fetch(`http://localhost:8080/feed/articles/${articleId}`, {
                 method: "GET",
@@ -37,7 +37,7 @@ export function ArticleDetail(){
     };
 
     useEffect(() => {
-        fetchArticles();
+        fetchArticle();
     }, []);
 
     return (
