@@ -1,6 +1,7 @@
 package com.piotrkowalczykk.dormitory_management_app.customer.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.DormitoryDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
@@ -49,5 +50,26 @@ public class CustomerController {
     public ResponseEntity<List<Dormitory>> getAllDormitories(){
         List<Dormitory> listOfDormitories = customerService.getAllDormitories();
         return ResponseEntity.ok(listOfDormitories);
+    }
+
+    @GetMapping("/dormitories/{dormitoryId}")
+    public ResponseEntity<DormitoryDTO> getDormitory(@PathVariable Long dormitoryId){
+        return ResponseEntity.ok(customerService.getDormitory(dormitoryId));
+    }
+
+    @PutMapping("/dormitories/{dormitoryId}")
+    public ResponseEntity<DormitoryDTO> editDormitory(@PathVariable Long dormitoryId, @RequestBody DormitoryDTO dormitoryDTO){
+        return ResponseEntity.ok(customerService.editDormitory(dormitoryId, dormitoryDTO));
+    }
+
+    @PostMapping("/dormitories")
+    public ResponseEntity<DormitoryDTO> createDormitory(@RequestBody DormitoryDTO dormitoryDTO){
+        return ResponseEntity.ok(customerService.createDormitory(dormitoryDTO));
+    }
+
+    @DeleteMapping("/dormitories/{dormitoryId}")
+    public ResponseEntity<String> deleteDormitory(@PathVariable Long dormitoryId){
+        customerService.deleteDormitory(dormitoryId);
+        return new ResponseEntity<>("Article deleted successfully", HttpStatus.OK);
     }
 }

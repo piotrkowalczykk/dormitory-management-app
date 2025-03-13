@@ -15,6 +15,8 @@ import { ArticleDetail } from './feed/pages/ArticleDetail/ArticleDetail'
 import { ArticlesPanel } from './feed/pages/Dashboard/ArticlesPanel/ArticlesPanel'
 import { Community } from './feed/pages/Community/Community'
 import { ManageArticle } from './feed/pages/Dashboard/ManageArticle/ManageArticle'
+import { DormitoriesPanel } from './feed/pages/Dashboard/DormitoriesPanel/DormitoriesPanel'
+import { ManageDormitory } from './feed/pages/Dashboard/ManageDormitory/ManageDormitory'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -56,6 +58,26 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <AdminRoute>
           <ManageArticle />
+        </AdminRoute>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/dormitories",
+    element: (
+      <ProtectedRoute>
+        <AdminRoute>
+          <DormitoriesPanel />
+        </AdminRoute>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/dormitories/manage",
+    element: (
+      <ProtectedRoute>
+        <AdminRoute>
+          <ManageDormitory />
         </AdminRoute>
       </ProtectedRoute>
     ),

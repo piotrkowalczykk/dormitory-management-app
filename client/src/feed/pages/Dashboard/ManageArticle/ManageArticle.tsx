@@ -9,7 +9,6 @@ export function ManageArticle(){
 
     const location = useLocation();
     const articleId = location.state?.id;
-
     const navigate = useNavigate();
 
     const [dormitories, setDormitories] = useState([]);

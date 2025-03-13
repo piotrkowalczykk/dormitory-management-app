@@ -3,6 +3,7 @@ package com.piotrkowalczykk.dormitory_management_app.customer.service;
 import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.DormitoryDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
@@ -129,5 +130,76 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Dormitory> getAllDormitories() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return dormitoryRepository.findAllByAcademyEmail(authentication.getName());
+    }
+
+    @Override
+    public DormitoryDTO getDormitory(Long dormitoryId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Dormitory dormitory = dormitoryRepository.findById(dormitoryId)
+                .orElseThrow(()-> new IllegalArgumentException("Dormitory not found"));
+
+        if(!authentication.getName().equals(dormitory.getAcademy().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this dormitory");
+        }
+
+        return new DormitoryDTO(
+                dormitory.getId(),
+                dormitory.getName(),
+                dormitory.getAddress(),
+                dormitory.getPhone()
+        );
+    }
+
+    @Override
+    public DormitoryDTO editDormitory(Long dormitoryId, DormitoryDTO dormitoryDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Dormitory dormitory = dormitoryRepository.findById(dormitoryId)
+                .orElseThrow(()-> new IllegalArgumentException("Dormitory not found"));
+
+        if(!authentication.getName().equals(dormitory.getAcademy().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this dormitory");
+        }
+
+        dormitory.setName(dormitoryDTO.getName());
+        dormitory.setAddress(dormitoryDTO.getAddress());
+        dormitory.setPhone(dormitoryDTO.getPhone());
+
+        dormitoryRepository.save(dormitory);
+        return new DormitoryDTO(
+                dormitory.getId(),
+                dormitory.getName(),
+                dormitory.getAddress(),
+                dormitory.getPhone()
+        );
+    }
+
+    @Override
+    public void deleteDormitory(Long dormitoryId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Dormitory dormitory = dormitoryRepository.findById(dormitoryId)
+                .orElseThrow(()-> new IllegalArgumentException("Dormitory not found"));
+
+        if(!authentication.getName().equals(dormitory.getAcademy().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this dormitory");
+        }
+
+        dormitoryRepository.deleteById(dormitoryId);
+    }
+
+    @Override
+    public DormitoryDTO createDormitory(DormitoryDTO dormitoryDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Academy academy = academyRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("Academy not found"));
+
+        Dormitory dormitory = new Dormitory(
+                dormitoryDTO.getName(),
+                dormitoryDTO.getAddress(),
+                dormitoryDTO.getPhone(),
+                academy
+        );
+
+        dormitoryRepository.save(dormitory);
+        return dormitoryDTO;
     }
 }
