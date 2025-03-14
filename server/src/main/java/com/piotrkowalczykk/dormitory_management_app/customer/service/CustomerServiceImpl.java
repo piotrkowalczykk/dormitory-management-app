@@ -4,11 +4,14 @@ import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.DormitoryDTO;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.StudentDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
+import com.piotrkowalczykk.dormitory_management_app.customer.model.Room;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.ArticleRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.DormitoryRepository;
+import com.piotrkowalczykk.dormitory_management_app.customer.repository.RoomRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.repository.StudentRepository;
 import com.piotrkowalczykk.dormitory_management_app.security.model.AuthUser;
 import com.piotrkowalczykk.dormitory_management_app.security.repository.AuthUserRepository;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -32,29 +36,35 @@ public class CustomerServiceImpl implements CustomerService {
     private final StudentRepository studentRepository;
     private final AuthUserRepository authUserRepository;
     private final AcademyRepository academyRepository;
+    private final RoomRepository roomRepository;
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    public CustomerServiceImpl(FileService fileService, DormitoryRepository dormitoryRepository, ArticleRepository articleRepository, StudentRepository studentRepository, AuthUserRepository authUserRepository, AcademyRepository academyRepository) {
+    public CustomerServiceImpl(FileService fileService, DormitoryRepository dormitoryRepository, ArticleRepository articleRepository, StudentRepository studentRepository, AuthUserRepository authUserRepository, AcademyRepository academyRepository, RoomRepository roomRepository) {
         this.fileService = fileService;
         this.dormitoryRepository = dormitoryRepository;
         this.articleRepository = articleRepository;
         this.studentRepository = studentRepository;
         this.authUserRepository = authUserRepository;
         this.academyRepository = academyRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
-    public List<Student> getAllStudents() {
+    public List<StudentDTO> getAllStudents() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loggedCustomerName = authentication.getName();
 
-        AuthUser user = authUserRepository.findByEmail(loggedCustomerName)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+        List<Student> listOfStudents = studentRepository.getAllStudentsByAcademyEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("Students not found"));
 
-        Academy academy = user.getAcademy();
 
-        return studentRepository.getAllStudentsByAcademyId(academy.getId())
-                .orElseThrow(()-> new IllegalArgumentException("Academy not found"));
+        return listOfStudents.stream().map(student -> new StudentDTO(
+                student.getId(),
+                student.getEmail(),
+                student.getRoom(),
+                student.getStudentNumber(),
+                student.getDormitory().getId(),
+                student.getDormitory().getName()
+        )).collect(Collectors.toList());
     }
 
     @Override
@@ -201,5 +211,72 @@ public class CustomerServiceImpl implements CustomerService {
 
         dormitoryRepository.save(dormitory);
         return dormitoryDTO;
+    }
+
+    @Override
+    public StudentDTO getStudent(Long studentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new IllegalArgumentException("Student not found"));
+
+        if(!authentication.getName().equals(student.getAcademy().getEmail())){
+            throw new AccessDeniedException("This student does not attend your academy");
+        }
+
+        return new StudentDTO(
+                student.getId(),
+                student.getEmail(),
+                student.getRoom(),
+                student.getStudentNumber(),
+                student.getDormitory().getId(),
+                student.getDormitory().getName()
+        );
+    }
+
+    @Override
+    public StudentDTO editStudent(Long studentId, StudentDTO studentDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new IllegalArgumentException("Student not found"));
+
+        if(!authentication.getName().equals(student.getAcademy().getEmail())){
+            throw new AccessDeniedException("This student does not attend your academy");
+        }
+
+        Dormitory dormitory = dormitoryRepository.findById(studentDTO.getDormitoryId())
+                .orElseThrow(()-> new IllegalArgumentException("Dormitory not found"));
+
+        student.setEmail(studentDTO.getEmail());
+        student.setRoom(studentDTO.getRoom());
+        student.setStudentNumber(studentDTO.getStudentNumber());
+        student.setDormitory(dormitory);
+
+        studentRepository.save(student);
+        return studentDTO;
+    }
+
+    @Override
+    public void deleteStudent(Long studentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new IllegalArgumentException("Student not found"));
+
+        if(!authentication.getName().equals(student.getAcademy().getEmail())){
+            throw new AccessDeniedException("This student does not attend your academy");
+        }
+
+        studentRepository.delete(student);
+    }
+
+    @Override
+    public List<Room> getAllRooms() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return roomRepository.findAllByCustomerEmail(authentication.getName());
+    }
+
+    @Override
+    public List<Room> getDormitoryRooms(Long dormitoryId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return roomRepository.findAllByCustomerEmailAndDormitory(authentication.getName(), dormitoryId);
     }
 }
