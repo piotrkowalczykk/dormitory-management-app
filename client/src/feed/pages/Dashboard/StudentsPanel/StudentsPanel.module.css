@@ -1,0 +1,70 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.innerContainer{
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    -webkit-box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    -moz-box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.containerName{
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+.addArticleBtn{
+    color: white;
+    font-weight: 600;
+    background-color: #4cff05;
+    padding: 0.25rem 1rem;
+    border-radius: 0.5rem;
+    -webkit-box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    -moz-box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+}
+.addArticleBtn:hover{
+    background-color: green;
+}
+.table{
+    border-collapse: collapse;
+}
+th{
+    font-weight: 600;
+    padding: 0.5rem;
+    text-align: left;
+}
+td{
+    padding: 0.5rem;
+    border-top: 1px solid black;
+    text-align: left;
+}
+.manageBtn{
+    -webkit-box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    -moz-box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    box-shadow: 0px 6px 0px -2px rgba(200, 200, 200, 1);
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.25rem;
+    border-radius: 1rem;
+}
+.imageList{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+}

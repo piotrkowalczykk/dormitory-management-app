@@ -1,12 +1,13 @@
 import classes from './ManageCard.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper, faBuilding, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faNewspaper, faBuilding, faUsers, faBed } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 const iconMap = {
     faNewspaper: faNewspaper,
     faBuilding: faBuilding,
     faUsers: faUsers,
+    faBed: faBed,
 };
 
 export function ManageCard({bgColor, iconName, counter, name, link}){

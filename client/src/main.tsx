@@ -17,6 +17,9 @@ import { Community } from './feed/pages/Community/Community'
 import { ManageArticle } from './feed/pages/Dashboard/ManageArticle/ManageArticle'
 import { DormitoriesPanel } from './feed/pages/Dashboard/DormitoriesPanel/DormitoriesPanel'
 import { ManageDormitory } from './feed/pages/Dashboard/ManageDormitory/ManageDormitory'
+import { StudentsPanel } from './feed/pages/Dashboard/StudentsPanel/StudentsPanel'
+import { ManageStudents } from './feed/pages/Dashboard/ManageStudents/ManageStudents'
+import { RoomsPanel } from './feed/pages/Dashboard/RoomsPanel/RoomsPanel'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -78,6 +81,36 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <AdminRoute>
           <ManageDormitory />
+        </AdminRoute>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/students",
+    element: (
+      <ProtectedRoute>
+        <AdminRoute>
+          <StudentsPanel />
+        </AdminRoute>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/students/manage",
+    element: (
+      <ProtectedRoute>
+        <AdminRoute>
+          <ManageStudents />
+        </AdminRoute>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/rooms",
+    element: (
+      <ProtectedRoute>
+        <AdminRoute>
+          <RoomsPanel />
         </AdminRoute>
       </ProtectedRoute>
     ),

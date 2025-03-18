@@ -2,6 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.customer.service;
 
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.DormitoryDTO;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.RoomDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.StudentDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
@@ -25,4 +26,5 @@ public interface CustomerService {
     public void deleteStudent(Long studentId);
     public List<Room> getAllRooms();
     public List<Room> getDormitoryRooms(Long dormitoryId);
+    public void deleteRoom(Long roomId);
 }

@@ -7,6 +7,8 @@ export function Dashboard(){
 
     const [articlesCount, setArticlesCount] = useState(0);
     const [dormitoriesCount, setDormitoriesCount] = useState(0);
+    const [studentsCount, setStudentsCount] = useState(0);
+    const [roomsCount, setRoomsCount] = useState(0);
 
     useEffect(()=>{
             const fetchArticles = async () => {
@@ -51,6 +53,29 @@ export function Dashboard(){
                 }
             }
 
+            
+            const fetchStudents = async () => {
+                try {
+                    const response = await fetch("http://localhost:8080/customer/students", {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                            },
+                    });
+    
+                    if(!response.ok){
+                        console.log('Failed to fetch students.');
+                    }
+    
+                    const data = await response.json();
+                    setStudentsCount(data.length);
+                } catch (error){
+                    console.log(error);
+                }
+            }
+
+        fetchStudents();
         fetchArticles();
         fetchDormitories();
     },[]);
@@ -64,7 +89,8 @@ export function Dashboard(){
             <div className={classes.container}>
                 <ManageCard bgColor='#ff0000' iconName='faNewspaper' counter={articlesCount} name='Articles' link='articles' />
                 <ManageCard bgColor='#4cff05' iconName='faBuilding' counter={dormitoriesCount} name='Dormitories' link='dormitories' />
-                <ManageCard bgColor='#0d85fc' iconName='faUsers' counter='1' name='Students' link='students' />
+                <ManageCard bgColor='#0d85fc' iconName='faUsers' counter={studentsCount} name='Students' link='students' />
+                <ManageCard bgColor='#f5ee25' iconName='faBed' counter={roomsCount} name='Rooms' link='rooms' />
             </div>
         </Layout>
     )

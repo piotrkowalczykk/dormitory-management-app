@@ -2,6 +2,7 @@ package com.piotrkowalczykk.dormitory_management_app.customer.controller;
 
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.DormitoryDTO;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.RoomDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.StudentDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
@@ -99,4 +100,11 @@ public class CustomerController {
     public ResponseEntity<List<Room>> getDormitoryRooms(@PathVariable Long dormitoryId){
         return ResponseEntity.ok(customerService.getDormitoryRooms(dormitoryId));
     }
+
+    @DeleteMapping("/rooms/{roomId}")
+    public ResponseEntity<String> deleteRoom(@PathVariable Long roomId){
+        customerService.deleteRoom(roomId);
+        return ResponseEntity.ok("Room deleted successfully");
+    }
+
 }

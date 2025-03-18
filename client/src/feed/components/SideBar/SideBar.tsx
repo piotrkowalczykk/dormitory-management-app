@@ -15,7 +15,7 @@ export function SideBar({isVisible}: {isVisible: boolean}){
     return(
         <div className={`${classes.container} ${isVisible ? classes.visible : classes.hidden}`}>
             <div className={classes.userData}>
-                <img className={classes.userAvatar} src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"/>
+                <img className={classes.userAvatar} src="/default-avatar.jpg"/>
                 <h1 className={classes.userName}>{userDetails.firstName}</h1>
             </div>
             <ul className={classes.navigation}>

@@ -107,7 +107,7 @@ public class FeedServiceImpl implements FeedService{
         } else {
             Student student = studentRepository.findByEmail(authentication.getName())
                     .orElseThrow(()-> new IllegalArgumentException("Student not found"));
-            articles = articleRepository.findAllByAuthorEmailAndDormitoryId(user.getAcademy().getEmail(), student.getDormitory().getId())
+            articles = articleRepository.findAllByAuthorEmailAndDormitoryId(user.getAcademy().getEmail(), student.getRoom().getDormitory().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Articles not found"));
         }
 

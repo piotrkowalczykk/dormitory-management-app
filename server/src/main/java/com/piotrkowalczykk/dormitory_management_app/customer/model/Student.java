@@ -14,16 +14,16 @@ public class Student {
     private String studentNumber;
     @ManyToOne(cascade = CascadeType.ALL)
     private Academy academy;
-    @OneToOne
-    @JoinColumn(name = "dormitory_id")
-    private Dormitory dormitory;
-    private String room;
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
 
-    public Student(Long id, String email, String studentNumber, Academy academy) {
+    public Student(Long id, String email, String studentNumber, Academy academy, Room room) {
         this.id = id;
         this.email = email;
         this.studentNumber = studentNumber;
         this.academy = academy;
+        this.room = room;
     }
 
     public Student(){
@@ -62,19 +62,11 @@ public class Student {
         this.academy = academy;
     }
 
-    public Dormitory getDormitory() {
-        return dormitory;
-    }
-
-    public void setDormitory(Dormitory dormitory) {
-        this.dormitory = dormitory;
-    }
-
-    public String getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
+    public void setRoom(Room room) {
         this.room = room;
     }
 }

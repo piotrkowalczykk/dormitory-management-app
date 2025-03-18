@@ -2,6 +2,8 @@ package com.piotrkowalczykk.dormitory_management_app.customer.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "rooms")
 public class Room {
@@ -15,6 +17,8 @@ public class Room {
     private Integer capacity;
     private Integer floor;
     private String type;
+    @OneToMany(mappedBy = "room")
+    private List<Student> students;
 
     public Room(Dormitory dormitory, String number, Integer capacity, Integer floor, String type) {
         this.dormitory = dormitory;

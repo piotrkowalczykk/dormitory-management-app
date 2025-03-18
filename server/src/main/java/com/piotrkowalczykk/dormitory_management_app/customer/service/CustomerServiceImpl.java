@@ -60,10 +60,11 @@ public class CustomerServiceImpl implements CustomerService {
         return listOfStudents.stream().map(student -> new StudentDTO(
                 student.getId(),
                 student.getEmail(),
-                student.getRoom(),
                 student.getStudentNumber(),
-                student.getDormitory().getId(),
-                student.getDormitory().getName()
+                student.getRoom().getDormitory().getId(),
+                student.getRoom().getDormitory().getName(),
+                student.getRoom().getId(),
+                student.getRoom().getNumber()
         )).collect(Collectors.toList());
     }
 
@@ -226,10 +227,11 @@ public class CustomerServiceImpl implements CustomerService {
         return new StudentDTO(
                 student.getId(),
                 student.getEmail(),
-                student.getRoom(),
                 student.getStudentNumber(),
-                student.getDormitory().getId(),
-                student.getDormitory().getName()
+                student.getRoom().getDormitory().getId(),
+                student.getRoom().getDormitory().getName(),
+                student.getRoom().getId(),
+                student.getRoom().getNumber()
         );
     }
 
@@ -243,13 +245,12 @@ public class CustomerServiceImpl implements CustomerService {
             throw new AccessDeniedException("This student does not attend your academy");
         }
 
-        Dormitory dormitory = dormitoryRepository.findById(studentDTO.getDormitoryId())
-                .orElseThrow(()-> new IllegalArgumentException("Dormitory not found"));
+        Room newRoom = roomRepository.findById(studentDTO.getRoomId())
+                .orElseThrow(()-> new IllegalArgumentException("Room not found"));
 
+        student.setRoom(newRoom);
         student.setEmail(studentDTO.getEmail());
-        student.setRoom(studentDTO.getRoom());
         student.setStudentNumber(studentDTO.getStudentNumber());
-        student.setDormitory(dormitory);
 
         studentRepository.save(student);
         return studentDTO;
@@ -278,5 +279,17 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Room> getDormitoryRooms(Long dormitoryId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return roomRepository.findAllByCustomerEmailAndDormitory(authentication.getName(), dormitoryId);
+    }
+
+    @Override
+    public void deleteRoom(Long roomId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(()-> new IllegalArgumentException("Room not found"));
+
+        if(!authentication.getName().equals(room.getDormitory().getAcademy().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this room");
+        }
+        roomRepository.delete(room);
     }
 }
