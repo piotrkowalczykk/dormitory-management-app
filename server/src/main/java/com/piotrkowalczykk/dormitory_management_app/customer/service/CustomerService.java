@@ -27,4 +27,5 @@ public interface CustomerService {
     public List<Room> getAllRooms();
     public List<Room> getDormitoryRooms(Long dormitoryId);
     public void deleteRoom(Long roomId);
+    public StudentDTO createStudent(StudentDTO studentDTO);
 }

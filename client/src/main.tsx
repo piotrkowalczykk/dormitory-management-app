@@ -116,6 +116,16 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/dashboard/rooms/manage",
+    element: (
+      <ProtectedRoute>
+        <AdminRoute>
+          <RoomsPanel />
+        </AdminRoute>
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/community",
     element: (
       <ProtectedRoute>

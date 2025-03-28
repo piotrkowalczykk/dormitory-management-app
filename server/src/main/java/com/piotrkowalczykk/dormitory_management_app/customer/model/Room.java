@@ -1,5 +1,6 @@
 package com.piotrkowalczykk.dormitory_management_app.customer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Room {
     private Integer capacity;
     private Integer floor;
     private String type;
+    @JsonIgnore
     @OneToMany(mappedBy = "room")
     private List<Student> students;
 
@@ -78,5 +80,13 @@ public class Room {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

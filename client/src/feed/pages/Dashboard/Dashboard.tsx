@@ -75,6 +75,28 @@ export function Dashboard(){
                 }
             }
 
+            const fetchRooms = async () => {
+                try {
+                    const response = await fetch("http://localhost:8080/customer/rooms", {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                            },
+                    });
+    
+                    if(!response.ok){
+                        console.log('Failed to fetch rooms.');
+                    }
+    
+                    const data = await response.json();
+                    setRoomsCount(data.length);
+                } catch (error){
+                    console.log(error);
+                }
+            }
+
+        fetchRooms();
         fetchStudents();
         fetchArticles();
         fetchDormitories();

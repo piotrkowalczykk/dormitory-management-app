@@ -46,6 +46,11 @@ public class CustomerController {
         return new ResponseEntity<>("Student deleted successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/students")
+    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO){
+        return ResponseEntity.ok(customerService.createStudent(studentDTO));
+    }
+
     @PostMapping("/articles")
     public ResponseEntity<Article> createArticle(@ModelAttribute ArticleRequest addArticleRequest){
         Article article = customerService.createArticle(addArticleRequest);

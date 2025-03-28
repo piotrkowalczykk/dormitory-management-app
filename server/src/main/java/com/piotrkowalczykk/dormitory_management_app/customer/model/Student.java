@@ -12,14 +12,14 @@ public class Student {
     @Column(unique = true)
     private String email;
     private String studentNumber;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "academy_id")
     private Academy academy;
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 
-    public Student(Long id, String email, String studentNumber, Academy academy, Room room) {
-        this.id = id;
+    public Student(String email, String studentNumber, Academy academy, Room room) {
         this.email = email;
         this.studentNumber = studentNumber;
         this.academy = academy;

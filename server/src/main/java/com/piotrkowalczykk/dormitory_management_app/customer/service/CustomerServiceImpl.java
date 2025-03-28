@@ -290,6 +290,35 @@ public class CustomerServiceImpl implements CustomerService {
         if(!authentication.getName().equals(room.getDormitory().getAcademy().getEmail())){
             throw new AccessDeniedException("You are not the owner of this room");
         }
+
+        if(!room.getStudents().isEmpty()){
+            throw new IllegalArgumentException("You cannot delete this room because there are still students assigned to it");
+        }
+
         roomRepository.delete(room);
+    }
+
+    @Override
+    public StudentDTO createStudent(StudentDTO studentDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Academy academy = academyRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new IllegalArgumentException("You are not the owner of any academy"));
+
+        Room room = roomRepository.findById(studentDTO.getRoomId())
+                .orElseThrow(()-> new IllegalArgumentException("Room not found"));
+
+        if(studentRepository.existsByEmail(studentDTO.getEmail()) || studentRepository.existsByStudentNumber(studentDTO.getStudentNumber())){
+            throw new IllegalArgumentException("Student already exists");
+        }
+
+        studentRepository.save(new Student(
+                studentDTO.getEmail(),
+                studentDTO.getStudentNumber(),
+                academy,
+                room
+        ));
+
+        return studentDTO;
+
     }
 }

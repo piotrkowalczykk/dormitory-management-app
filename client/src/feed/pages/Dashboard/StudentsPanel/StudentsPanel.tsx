@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Layout } from '../../../components/Layout/Layout'
 import classes from './StudentsPanel.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faEye, faNewspaper, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye, faTrashAlt, faUser} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 export function StudentsPanel(){
@@ -73,7 +73,7 @@ export function StudentsPanel(){
                 <div className={classes.innerContainer}>
                 <div className={classes.header}>
                     <h2 className={classes.containerName}>Students</h2>
-                    <Link to='/dashboard/students/manage' title='Add new student' className={classes.addArticleBtn}>+  <FontAwesomeIcon icon={faNewspaper} className={classes.icon} /></Link>
+                    <Link to='/dashboard/students/manage' title='Add new student' className={classes.addArticleBtn}>+  <FontAwesomeIcon icon={faUser} className={classes.icon} /></Link>
                 </div>
                 {isLoading ? <p>Loading...</p> :
                 <table className={classes.table}>
@@ -85,6 +85,7 @@ export function StudentsPanel(){
                             <th>Room</th>
                             <th>Student Number</th>
                             <th>Dormitory</th>
+                            <th>Manage</th>
                         </tr>
                     </thead>
                     <tbody>
