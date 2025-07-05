@@ -4,6 +4,7 @@ import com.piotrkowalczykk.dormitory_management_app.admin.model.Academy;
 import com.piotrkowalczykk.dormitory_management_app.admin.repository.AcademyRepository;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.ArticleRequest;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.DormitoryDTO;
+import com.piotrkowalczykk.dormitory_management_app.customer.dto.RoomDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.dto.StudentDTO;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Article;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
@@ -276,6 +277,27 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public RoomDTO getRoom(Long roomId) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        if(!authentication.getName().equals(room.getDormitory().getAcademy().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this room");
+        }
+
+        return new RoomDTO(
+                room.getId(),
+                room.getNumber(),
+                room.getDormitory().getId(),
+                room.getCapacity(),
+                room.getFloor(),
+                room.getType(),
+                room.getDormitory().getName()
+        );
+    }
+
+    @Override
     public List<Room> getDormitoryRooms(Long dormitoryId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return roomRepository.findAllByCustomerEmailAndDormitory(authentication.getName(), dormitoryId);
@@ -299,6 +321,30 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public RoomDTO editRoom(Long roomId, RoomDTO roomDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(()-> new IllegalArgumentException("Room not found"));
+
+        if(!authentication.getName().equals(room.getDormitory().getAcademy().getEmail())){
+            throw new AccessDeniedException("You are not the owner of this room");
+        }
+
+        Dormitory newDormitory = dormitoryRepository.findById(roomDTO.getDormitoryId())
+                .orElseThrow(()-> new IllegalArgumentException("Dormitory not found"));
+
+       room.setDormitory(newDormitory);
+       room.setCapacity(roomDTO.getCapacity());
+       room.setFloor(roomDTO.getFloor());
+       room.setNumber(roomDTO.getNumber());
+       room.setType(roomDTO.getType());
+
+       roomRepository.save(room);
+
+       return roomDTO;
+    }
+
+    @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Academy academy = academyRepository.findByEmail(authentication.getName())
@@ -319,6 +365,7 @@ public class CustomerServiceImpl implements CustomerService {
         ));
 
         return studentDTO;
-
     }
+
+
 }

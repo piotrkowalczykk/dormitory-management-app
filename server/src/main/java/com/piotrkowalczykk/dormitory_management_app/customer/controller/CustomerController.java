@@ -9,6 +9,7 @@ import com.piotrkowalczykk.dormitory_management_app.customer.model.Dormitory;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Room;
 import com.piotrkowalczykk.dormitory_management_app.customer.model.Student;
 import com.piotrkowalczykk.dormitory_management_app.customer.service.CustomerService;
+import com.piotrkowalczykk.dormitory_management_app.feed.dto.PublicUserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,16 +97,25 @@ public class CustomerController {
         return new ResponseEntity<>("Article deleted successfully", HttpStatus.OK);
     }
 
+    @GetMapping("/dormitory/{dormitoryId}/rooms")
+    public ResponseEntity<List<Room>> getDormitoryRooms(@PathVariable Long dormitoryId){
+        return ResponseEntity.ok(customerService.getDormitoryRooms(dormitoryId));
+    }
+
     @GetMapping("/rooms")
     public ResponseEntity<List<Room>> getAllRooms(){
         return ResponseEntity.ok(customerService.getAllRooms());
     }
 
-    @GetMapping("/rooms/{dormitoryId}")
-    public ResponseEntity<List<Room>> getDormitoryRooms(@PathVariable Long dormitoryId){
-        return ResponseEntity.ok(customerService.getDormitoryRooms(dormitoryId));
+    @GetMapping("/rooms/{roomId}")
+    public ResponseEntity<RoomDTO> getRoom(@PathVariable Long roomId){
+        return ResponseEntity.ok(customerService.getRoom(roomId));
     }
 
+    @PutMapping("/rooms/{roomId}")
+    public ResponseEntity<RoomDTO> editRoom(@PathVariable Long roomId, @RequestBody RoomDTO roomDTO){
+        return ResponseEntity.ok(customerService.editRoom(roomId, roomDTO));
+    }
     @DeleteMapping("/rooms/{roomId}")
     public ResponseEntity<String> deleteRoom(@PathVariable Long roomId){
         customerService.deleteRoom(roomId);

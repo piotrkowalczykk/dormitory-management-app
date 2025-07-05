@@ -77,7 +77,7 @@ export function ManageStudents(){
 
     const fetchRooms = async (dormitoryId) => {
         try {
-            const response = await fetch(`http://localhost:8080/customer/rooms/${dormitoryId}`, {
+            const response = await fetch(`http://localhost:8080/customer/dormitory/${dormitoryId}/rooms`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

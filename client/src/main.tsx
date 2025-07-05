@@ -20,6 +20,7 @@ import { ManageDormitory } from './feed/pages/Dashboard/ManageDormitory/ManageDo
 import { StudentsPanel } from './feed/pages/Dashboard/StudentsPanel/StudentsPanel'
 import { ManageStudents } from './feed/pages/Dashboard/ManageStudents/ManageStudents'
 import { RoomsPanel } from './feed/pages/Dashboard/RoomsPanel/RoomsPanel'
+import { ManageRooms } from './feed/pages/Dashboard/ManageRooms/ManageRooms'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -120,7 +121,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AdminRoute>
-          <RoomsPanel />
+          <ManageRooms />
         </AdminRoute>
       </ProtectedRoute>
     ),
